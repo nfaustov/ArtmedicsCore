@@ -1,32 +1,32 @@
 import Foundation
 
-public struct Doctor: Codable, Hashable {
-    var id: UUID?
-    var secondName: String
-    var firstName: String
-    var patronymicName: String
-    var phoneNumber: String
-    var birthDate: Date?
-    var specialization: String
-    var basicService: String?
-    var serviceDuration: TimeInterval
-    var defaultCabinet: Int?
-    var info: String?
-    var imageData: Data?
+public struct Doctor: Codable, Hashable, Identifiable {
+    public let id: UUID
+    public var secondName: String
+    public var firstName: String
+    public var patronymicName: String
+    public var phoneNumber: String
+    public var birthDate: Date?
+    public var specialization: String
+    public var basicService: String?
+    public var serviceDuration: TimeInterval
+    public var defaultCabinet: Int?
+    public var info: String?
+    public var imageData: Data?
 
-    var fullName: String {
+    public var fullName: String {
         secondName + " " + firstName + " " + patronymicName
     }
 
-    var initials: String {
+    public var initials: String {
         guard let firstNameLetter = firstName.first,
               let patronymicNameLetter = patronymicName.first else { return secondName }
 
         return "\(secondName) \(firstNameLetter).\(patronymicNameLetter)"
     }
 
-    init(
-        id: UUID? = UUID(),
+    public init(
+        id: UUID = UUID(),
         secondName: String,
         firstName: String,
         patronymicName: String,

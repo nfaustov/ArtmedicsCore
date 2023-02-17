@@ -1,15 +1,15 @@
 import Foundation
 
-public struct DoctorSchedule: Codable, Equatable, Hashable {
-    let id: UUID?
-    let doctor: Doctor
-    var cabinet: Int
-    var starting: Date
-    var ending: Date
-    var patientAppointments: [PatientAppointment]
+public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
+    public let id: UUID
+    public let doctor: Doctor
+    public var cabinet: Int
+    public var starting: Date
+    public var ending: Date
+    public var patientAppointments: [PatientAppointment]
 
-    init(
-        id: UUID? = UUID(),
+    public init(
+        id: UUID = UUID(),
         doctor: Doctor,
         starting: Date,
         ending: Date,
@@ -29,7 +29,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable {
     }
 
     /// Updates number of patient appointments, excluding impact on already scheduled patients.
-    mutating func updateAppointments() {
+    public mutating func updateAppointments() {
         if patientAppointments.compactMap({ $0.patient }).isEmpty {
             patientAppointments.removeAll()
             createAppointments()
@@ -43,7 +43,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable {
     /// Replace appointments with new appointment at the same scheduled time.
     /// - Parameters:
     ///   - newAppointment: New appointment to update
-    mutating func updateAppointments(with newAppointment: PatientAppointment) {
+    public mutating func updateAppointments(with newAppointment: PatientAppointment) {
         guard let index = patientAppointments.firstIndex(
             where: { $0.scheduledTime == newAppointment.scheduledTime }
         ) else {
@@ -71,7 +71,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable {
         }
     }
 
-    func maxServiceDuration(for appointment: PatientAppointment) -> TimeInterval {
+    public func maxServiceDuration(for appointment: PatientAppointment) -> TimeInterval {
         if let nextReservedAppointment = patientAppointments
             .filter({ $0.scheduledTime > appointment.scheduledTime })
             .first(where: { $0.patient != nil }) {

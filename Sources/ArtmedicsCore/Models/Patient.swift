@@ -1,18 +1,18 @@
 import Foundation
 
-public struct Patient: Codable, Hashable {
-    var id: UUID?
-    var secondName: String
-    var firstName: String
-    var patronymicName: String
-    var phoneNumber: String
-    let passport: PassportData?
-    let placeOfResidence: PlaceOfResidence?
-    let treatmentPlan: TreatmentPlan?
-    let visits: [Visit]
+public struct Patient: Codable, Hashable, Identifiable {
+    public let id: UUID
+    public var secondName: String
+    public var firstName: String
+    public var patronymicName: String
+    public var phoneNumber: String
+    public var passport: PassportData?
+    public var placeOfResidence: PlaceOfResidence?
+    public var treatmentPlan: TreatmentPlan?
+    public var visits: [Visit]
 
-    init(
-        id: UUID? = UUID(),
+    public init(
+        id: UUID = UUID(),
         secondName: String,
         firstName: String,
         patronymicName: String,
@@ -33,55 +33,55 @@ public struct Patient: Codable, Hashable {
         self.visits = visits
     }
 
-    var fullName: String {
+    public var fullName: String {
         secondName + " " + firstName + " " + patronymicName
     }
 }
 
 public extension Patient {
     struct PassportData: Codable, Hashable {
-        let secondName: String
-        let name: String
-        let patronymic: String
-        let gender: String
-        let seriesNumber: String
-        let birtday: Date
-        let birthPlace: String
-        let issueDate: Date
-        let authority: String
+        public let secondName: String
+        public let name: String
+        public let patronymic: String
+        public let gender: String
+        public let seriesNumber: String
+        public let birtday: Date
+        public let birthPlace: String
+        public let issueDate: Date
+        public let authority: String
     }
 }
 
 public extension Patient {
     struct PlaceOfResidence: Codable, Hashable {
-        let region: String
-        let locality: String
-        let streetAdress: String
-        let house: String
-        let appartment: String
+        public let region: String
+        public let locality: String
+        public let streetAdress: String
+        public let house: String
+        public let appartment: String
     }
 }
 
 public struct TreatmentPlan: Codable, Hashable {
-    enum Kind: String, Codable {
+    public enum Kind: String, Codable {
         case standard
         case pregnancy
     }
 
-    let kind: Kind
-    let startingDate: Date
-    let expirationDate: Date
+    public let kind: Kind
+    public let startingDate: Date
+    public let expirationDate: Date
 }
 
 public struct Visit: Codable, Hashable {
-    let registrationDate: Date
-    let visitDate: Date
-    let doctorsConclusion: DoctorsConclusion?
-    let contract: Data?
+    public let registrationDate: Date
+    public let visitDate: Date
+    public let doctorsConclusion: DoctorsConclusion?
+    public let contract: Data?
 }
 
 public struct DoctorsConclusion: Codable, Hashable {
-    let doctorName: String
-    let service: Service
-    let conclusion: Data?
+    public let doctorName: String
+    public let service: Service
+    public let conclusion: Data?
 }

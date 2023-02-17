@@ -1,22 +1,22 @@
 import Foundation
 
 public final class PriceList {
-    let categories: [ServicesCategory]
+    public let categories: [ServicesCategory]
 
-    init(categories: [ServicesCategory]) {
+    public init(categories: [ServicesCategory]) {
         self.categories = categories
     }
 }
 
 public struct ServicesCategory: Codable, Hashable {
-    let tittle: String
-    let subCategories: [ServicesCategory]?
-    let services: [Service]?
+    public let tittle: String
+    public let subCategories: [ServicesCategory]?
+    public let services: [Service]?
 }
 
 public struct Service: Codable, Hashable {
-    let code: String
-    let title: String
-    let price: Double
-    let costPrice: Double
+    public let code: String
+    public let title: String
+    public let price: Double
+    public let costPrice: Double
 }
