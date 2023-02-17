@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PatientAppointment: Codable, Hashable {
+public struct PatientAppointment: Codable, Hashable, Identifiable {
     public let id: UUID
     public var scheduledTime: Date
     public var duration: TimeInterval
