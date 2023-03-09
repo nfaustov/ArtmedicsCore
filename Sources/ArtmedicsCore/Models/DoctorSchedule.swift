@@ -28,6 +28,20 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
+    public var scheduledPatients: Int {
+        patientAppointments
+            .compactMap { $0.patient }
+            .count
+    }
+
+    public var availableAppointments: Int {
+        patientAppointments.count - scheduledPatients
+    }
+
+    public var duration: TimeInterval {
+        ending.timeIntervalSince(starting)
+    }
+
     /// Updates number of patient appointments, excluding impact on already scheduled patients.
     public mutating func updateAppointments() {
         if patientAppointments.compactMap({ $0.patient }).isEmpty {
