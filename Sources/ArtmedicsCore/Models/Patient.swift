@@ -66,6 +66,7 @@ public struct TreatmentPlan: Codable, Hashable {
     public enum Kind: String, Codable {
         case standard
         case pregnancy
+        case none
     }
 
     public let kind: Kind
@@ -76,8 +77,22 @@ public struct TreatmentPlan: Codable, Hashable {
 public struct Visit: Codable, Hashable {
     public let registrationDate: Date
     public let visitDate: Date
-    public let doctorsConclusion: DoctorsConclusion?
+    public let check: Check
+    public let conclusions: [DoctorsConclusion]
     public let contract: Data?
+}
+
+public struct Check: Codable, Hashable {
+    public let services: [Service]
+    public let discount: Double
+
+    public var totalPrice: Double {
+        let price = services
+            .map { $0.price }
+            .reduce(0.0, +)
+
+        return price - discount
+    }
 }
 
 public struct DoctorsConclusion: Codable, Hashable {

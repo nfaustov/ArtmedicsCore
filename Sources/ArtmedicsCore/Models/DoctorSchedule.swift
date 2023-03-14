@@ -85,6 +85,8 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
+    /// Calculate available duration for patient's appointment.
+    /// - Parameter appointment: Appointment for calculation.
     public func maxServiceDuration(for appointment: PatientAppointment) -> TimeInterval {
         if let nextReservedAppointment = patientAppointments
             .filter({ $0.scheduledTime > appointment.scheduledTime })
