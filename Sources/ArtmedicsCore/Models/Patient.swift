@@ -74,29 +74,34 @@ public struct TreatmentPlan: Codable, Hashable {
     public let expirationDate: Date
 }
 
-public struct Visit: Codable, Hashable {
+public struct Visit: Codable, Hashable, Identifiable {
+    public let id: UUID
     public let registrationDate: Date
     public let visitDate: Date
     public let check: Check
-    public let conclusions: [DoctorsConclusion]
     public let contract: Data?
 }
 
-public struct Check: Codable, Hashable {
-    public let services: [Service]
+public struct Check: Codable, Hashable, Identifiable {
+    public let id: UUID
+    public let services: [RenderedService]
     public let discount: Double
 
-    public var totalPrice: Double {
-        let price = services
-            .map { $0.price }
+    public var price: Double {
+        services
+            .map { $0.priceListItem.price }
             .reduce(0.0, +)
+    }
 
-        return price - discount
+    public var totalPrice: Double {
+        price - discount
     }
 }
 
-public struct DoctorsConclusion: Codable, Hashable {
-    public let doctorName: String
-    public let service: Service
+public struct RenderedService: Codable, Hashable, Identifiable {
+    public let id: UUID
+    public let priceListItem: PriceListItem
+    public let performer: Doctor
+    public let agent: Doctor
     public let conclusion: Data?
 }
