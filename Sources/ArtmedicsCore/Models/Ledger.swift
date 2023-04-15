@@ -31,9 +31,9 @@ public struct Payment: Codable, Hashable, Identifiable {
 }
 
 public extension Payment {
-    enum PaymentType: Codable, Hashable {
-        case cash
-        case bank
-        case card
+    enum PaymentType: String, Codable, Hashable {
+        case cash = "Касса"
+        case bank = "Терминал"
+        case card = "Карта"
     }
 }
