@@ -14,7 +14,7 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
         }
 
         public static var allCases: [PatientAppointment.Status] {
-            [registered, confirmed, came, inProgress]
+            [.registered, .confirmed, .came, .inProgress]
         }
     }
 
