@@ -2,6 +2,7 @@ import Foundation
 
 public struct PatientAppointment: Codable, Hashable, Identifiable {
     public enum Status: String, Codable, CaseIterable, Identifiable {
+        case none
         case registered = "Зарегистрирован"
         case confirmed = "Подтвержден"
         case came = "Пришел"
@@ -13,7 +14,7 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
             self
         }
 
-        public static var allCases: [PatientAppointment.Status] {
+        public static var allCases: [Status] {
             [.registered, .confirmed, .came, .inProgress]
         }
     }
@@ -24,7 +25,7 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
     public var patient: Patient?
     public var status: Status
 
-    public init(id: UUID = UUID(), scheduledTime: Date, duration: TimeInterval, patient: Patient?, status: Status = .registered) {
+    public init(id: UUID = UUID(), scheduledTime: Date, duration: TimeInterval, patient: Patient?, status: Status = .none) {
         self.id = id
         self.scheduledTime = scheduledTime
         self.duration = duration
