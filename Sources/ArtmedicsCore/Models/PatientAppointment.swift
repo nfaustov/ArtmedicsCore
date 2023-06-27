@@ -1,13 +1,17 @@
 import Foundation
 
 public struct PatientAppointment: Codable, Hashable, Identifiable {
-    public enum Status: String, Codable {
+    public enum Status: String, Codable, CaseIterable, Identifiable {
         case none
         case registered = "Зарегистрирован"
-        case congirmed = "Подтвержден"
+        case confirmed = "Подтвержден"
         case came = "Пришел"
         case completed = "Завершен"
         case cancelled = "Отменен"
+
+        public var id: Self {
+            self
+        }
     }
 
     public let id: UUID
