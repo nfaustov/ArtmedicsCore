@@ -1,7 +1,7 @@
 import Foundation
 
 public struct Doctor: Codable, Hashable, Identifiable {
-    public enum Specialization: String, Codable, Hashable, Identifiable {
+    public enum Specialization: String, Codable, CaseIterable, Hashable, Identifiable {
         case gynecologist = "Гинеколог"
         case therapist = "Терапевт"
         case urologist = "Уролог"
