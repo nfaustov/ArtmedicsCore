@@ -21,5 +21,6 @@ public struct PriceListItem: Codable, Hashable, Identifiable {
     public let id: String
     public let title: String
     public let price: Double
-    public let costPrice: Double
+    public var costPrice: Double = 0
+    public var used: Int = 0
 }
