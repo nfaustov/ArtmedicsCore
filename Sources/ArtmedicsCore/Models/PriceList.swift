@@ -1,7 +1,7 @@
 import Foundation
 
 public final class PriceList {
-    public let categories: [Category]
+    public var categories: [Category]
 
     public init(categories: [Category]) {
         self.categories = categories
@@ -11,16 +11,16 @@ public final class PriceList {
 public extension PriceList {
     struct Category: Codable, Hashable, Identifiable {
         public let id: UUID
-        public let title: String
-        public let subCategories: [Category]?
-        public let items: [PriceListItem]?
+        public var title: String
+        public var subCategories: [Category]?
+        public var items: [PriceListItem]?
     }
 }
 
 public struct PriceListItem: Codable, Hashable, Identifiable {
-    public let id: String
-    public let title: String
-    public let price: Double
+    public var id: String
+    public var title: String
+    public var price: Double
     public var costPrice: Double = 0
     public var used: Int = 0
 }
