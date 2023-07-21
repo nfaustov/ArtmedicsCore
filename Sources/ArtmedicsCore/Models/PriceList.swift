@@ -6,6 +6,20 @@ public final class PriceList {
     public init(categories: [Category]) {
         self.categories = categories
     }
+
+    public func filteredCategories(byItem filterText: String) -> [Category] {
+        if filterText.isEmpty {
+            return categories
+        } else {
+            return categories.filter { category in
+                guard let items = category.items else { return false }
+
+                return !items
+                    .filter { $0.title.localizedCaseInsensitiveContains(filterText) }
+                    .isEmpty
+            }
+        }
+    }
 }
 
 public extension PriceList {
@@ -14,6 +28,25 @@ public extension PriceList {
         public var title: String
         public var subCategories: [Category]?
         public var items: [PriceListItem]?
+
+        public init(id: UUID = UUID(), title: String, subCategories: [Category]? = nil, items: [PriceListItem]? = nil) {
+            self.id = id
+            self.title = title
+            self.subCategories = subCategories
+            self.items = items
+        }
+
+        public func filteredItems(by filterText: String) -> [PriceListItem] {
+            guard let items = items else { return [] }
+
+            if filterText.isEmpty {
+                return items
+            } else {
+                return items.filter {
+                        $0.title.localizedCaseInsensitiveContains(filterText) || $0.id.localizedCaseInsensitiveContains(filterText)
+                    }
+            }
+        }
     }
 }
 
@@ -21,6 +54,14 @@ public struct PriceListItem: Codable, Hashable, Identifiable {
     public var id: String
     public var title: String
     public var price: Double
-    public var costPrice: Double = 0
-    public var used: Int = 0
+    public var costPrice: Double
+    public var used: Int
+
+    public init(id: String, title: String, price: Double, costPrice: Double = 0, used: Int = 0) {
+        self.id = id
+        self.title = title
+        self.price = price
+        self.costPrice = costPrice
+        self.used = used
+    }
 }
