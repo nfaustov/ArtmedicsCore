@@ -15,7 +15,9 @@ public final class PriceList {
                 guard let items = category.items else { return false }
 
                 return !items
-                    .filter { $0.title.localizedCaseInsensitiveContains(filterText) }
+                    .filter {
+                        $0.title.localizedCaseInsensitiveContains(filterText) || $0.id.localizedCaseInsensitiveContains(filterText)
+                    }
                     .isEmpty
             }
         }
