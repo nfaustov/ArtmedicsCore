@@ -23,13 +23,13 @@ public struct Doctor: Codable, Hashable, Identifiable {
     public var firstName: String
     public var patronymicName: String
     public var phoneNumber: String
-    public var birthDate: Date?
+    public var birthDate: Date
     public var specialization: Specialization
-    public var basicService: String?
+    public var basicServiceID: String = ""
     public var serviceDuration: TimeInterval
-    public var defaultCabinet: Int?
-    public var info: String?
-    public var imageData: Data?
+    public var defaultCabinet: Int
+    public var info: String
+    public var imageURL: String
 
     public var fullName: String {
         secondName + " " + firstName + " " + patronymicName
@@ -48,13 +48,13 @@ public struct Doctor: Codable, Hashable, Identifiable {
         firstName: String,
         patronymicName: String,
         phoneNumber: String,
-        birthDate: Date?,
+        birthDate: Date,
         specialization: Specialization,
-        basicService: String?,
+        basicServiceID: String = "",
         serviceDuration: TimeInterval,
-        defaultCabinet: Int? = nil,
-        info: String? = nil,
-        imageData: Data? = nil
+        defaultCabinet: Int,
+        info: String = "",
+        imageURL: String = ""
     ) {
         self.id = id
         self.secondName = secondName
@@ -63,10 +63,10 @@ public struct Doctor: Codable, Hashable, Identifiable {
         self.phoneNumber = phoneNumber
         self.birthDate = birthDate
         self.specialization = specialization
-        self.basicService = basicService
+        self.basicServiceID = basicServiceID
         self.serviceDuration = serviceDuration
         self.defaultCabinet = defaultCabinet
         self.info = info
-        self.imageData = imageData
+        self.imageURL = imageURL
     }
 }

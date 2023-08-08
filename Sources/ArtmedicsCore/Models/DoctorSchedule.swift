@@ -61,7 +61,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         guard let index = patientAppointments.firstIndex(
             where: { $0.scheduledTime == newAppointment.scheduledTime }
         ) else {
-            preconditionFailure("Cannot find corresponding appointment.")
+            preconditionFailure("Время начала приема не соответствует расписанию.")
         }
 
         if newAppointment.duration == patientAppointments[index].duration {
