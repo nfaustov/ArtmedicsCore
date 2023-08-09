@@ -42,19 +42,18 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         ending.timeIntervalSince(starting)
     }
 
-    /// Updates number of patient appointments, excluding impact on already scheduled patients.
+    /// Updates number of patient appointments, based on starting and ending properties.
+    /// Works only if appointments doesn't have a patients.
     public mutating func updateAppointments() {
-        if patientAppointments.compactMap({ $0.patient }).isEmpty {
-            patientAppointments.removeAll()
-            createAppointments()
-        } else {
-            patientAppointments.removeAll(where: { $0.patient == nil })
-            editAppointments()
-            patientAppointments.sort { $0.scheduledTime < $1.scheduledTime }
+        guard patientAppointments.compactMap({ $0.patient }).isEmpty else {
+            preconditionFailure("Невозможно выполнить операцию, в расписании есть записанные пациенты.")
         }
+
+        patientAppointments.removeAll()
+        createAppointments()
     }
 
-    /// Replace appointments with new appointment at the same scheduled time.
+    /// Replace appointment with new appointment at the same scheduled time.
     /// - Parameters:
     ///   - newAppointment: New appointment to update
     public mutating func updateAppointments(with newAppointment: PatientAppointment) {
@@ -96,45 +95,44 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             return ending.timeIntervalSince(appointment.scheduledTime)
         }
     }
+    
+    /// Create new empty appointment at the begining of schedule, starting time shifts early on doctor's duration time interval.
+    public mutating func extendStarting() {
+        let patientAppointment = PatientAppointment(
+            scheduledTime: starting.addingTimeInterval(-doctor.serviceDuration),
+            duration: doctor.serviceDuration,
+            patient: nil
+        )
+        starting = patientAppointment.scheduledTime
+        patientAppointments.insert(patientAppointment, at: 0)
+    }
+    
+    /// Create new empty appointment at the end of schedule, ending time shifts late on doctor's duration time interval.
+    public mutating func extendEnding() {
+        let patientAppointment = PatientAppointment(
+            scheduledTime: ending,
+            duration: doctor.serviceDuration,
+            patient: nil
+        )
+        ending.addTimeInterval(patientAppointment.duration)
+        patientAppointments.append(patientAppointment)
+    }
 }
 
 // MARK: - Private methods
 
 private extension DoctorSchedule {
-    mutating func addingAppointmentIteration(_ appointmentTime: inout Date) {
-        let appointment = PatientAppointment(
-            scheduledTime: appointmentTime,
-            duration: doctor.serviceDuration,
-            patient: nil
-        )
-        patientAppointments.append(appointment)
-        appointmentTime.addTimeInterval(doctor.serviceDuration)
-    }
-
     mutating func createAppointments() {
         var appointmentTime = starting
 
         repeat {
-            addingAppointmentIteration(&appointmentTime)
+            let appointment = PatientAppointment(
+                scheduledTime: appointmentTime,
+                duration: doctor.serviceDuration,
+                patient: nil
+            )
+            patientAppointments.append(appointment)
+            appointmentTime.addTimeInterval(doctor.serviceDuration)
         } while appointmentTime < ending
-    }
-
-    mutating func editAppointments() {
-        guard let firstPatientStarting = patientAppointments.first(where: { $0.patient != nil })?.scheduledTime,
-              let lastPatient = patientAppointments.last(where: { $0.patient != nil }) else {
-            return
-        }
-
-        var appointmentTime = starting
-
-        while appointmentTime < firstPatientStarting {
-            addingAppointmentIteration(&appointmentTime)
-        }
-
-        appointmentTime = lastPatient.scheduledTime.addingTimeInterval(lastPatient.duration)
-
-        while appointmentTime < ending {
-            addingAppointmentIteration(&appointmentTime)
-        }
     }
 }
