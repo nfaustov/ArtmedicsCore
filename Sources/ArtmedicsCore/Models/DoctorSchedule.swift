@@ -55,28 +55,28 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
 
     /// Replace appointment with new appointment at the same scheduled time.
     /// - Parameters:
-    ///   - newAppointment: New appointment to update
+    ///   - newAppointment: New appointment with updates
     public mutating func updateAppointments(with newAppointment: PatientAppointment) {
         guard let index = patientAppointments.firstIndex(
             where: { $0.scheduledTime == newAppointment.scheduledTime }
-        ) else {
-            preconditionFailure("Время начала приема не соответствует расписанию.")
-        }
+        ) else { return }
 
         if newAppointment.duration == patientAppointments[index].duration {
-            patientAppointments[index].patient = newAppointment.patient
+            patientAppointments[index].update(patient: newAppointment.patient)
         } else if newAppointment.duration > patientAppointments[index].duration {
-            let crossedIndex = index + Int(newAppointment.duration / doctor.serviceDuration)
-            precondition(
-                crossedIndex <= patientAppointments.count,
-                "Длительность приема выходит за рамки длительности расписания."
-            )
+            let deletingAppointments = patientAppointments
+                .filter { (newAppointment.scheduledTime...newAppointment.endTime).contains($0.scheduledTime) }
+                .dropFirst()
 
-            let replacedPatients = patientAppointments[index..<crossedIndex].compactMap { $0.patient }
-            precondition(replacedPatients.isEmpty, "На данном интервале уже есть записанный пациент")
+            guard deletingAppointments.compactMap({ $0.patient }).isEmpty else { return }
 
-            patientAppointments.removeSubrange(index..<crossedIndex)
-            patientAppointments.insert(newAppointment, at: index)
+            patientAppointments.removeAll(where: { deletingAppointments.contains($0) })
+            patientAppointments[index].update(patient: newAppointment.patient)
+            patientAppointments[index].duration = newAppointment.duration
+            
+            if newAppointment.endTime > self.ending {
+                self.ending = newAppointment.endTime
+            }
         } else {
             preconditionFailure(
                 "Длительность приема слишком маленькая, необходимо по крайней мере \(doctor.serviceDuration / 60) мин."
@@ -92,7 +92,19 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             .first(where: { $0.patient != nil }) {
             return nextReservedAppointment.scheduledTime.timeIntervalSince(appointment.scheduledTime)
         } else {
-            return ending.timeIntervalSince(appointment.scheduledTime)
+            return 7200
+        }
+    }
+    
+    /// Split long appointment to many appointments with doctor service duration.
+    /// Works only if appointments doesn't have a patients and appointment duration bigger than doctor service duration.
+    /// - Parameter appointment: Appointment for split.
+    public mutating func splitToBasicDurationIfNeeded(_ appointment: PatientAppointment) {
+        if appointment.duration > doctor.serviceDuration, appointment.patient == nil {
+            patientAppointments.removeAll(where: { $0.scheduledTime == appointment.scheduledTime })
+            createAppointments(
+                on: DateInterval(start: appointment.scheduledTime, duration: appointment.duration)
+            )
         }
     }
     
@@ -114,16 +126,38 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             duration: doctor.serviceDuration,
             patient: nil
         )
-        ending.addTimeInterval(patientAppointment.duration)
+        ending = patientAppointment.endTime
         patientAppointments.append(patientAppointment)
+    }
+    
+    /// Remove first appointment in schedule, starting time shifts late on deleted appointment duration interval.
+    public mutating func removeFirstAppointment() {
+        if let firstAppointment = patientAppointments.first,
+           let secondAppointment = patientAppointments.dropFirst().first {
+            guard firstAppointment.patient == nil else { return }
+
+            patientAppointments.removeFirst()
+            starting = secondAppointment.scheduledTime
+        }
+    }
+    
+    /// Remove last appointment in schedule, ending time shifts early on deleted appointment duration interval.
+    public mutating func removeLastAppointment() {
+        if let lastAppointment = patientAppointments.last,
+           let lastButOneAppointment = patientAppointments.dropLast().last {
+            guard lastAppointment.patient == nil else { return }
+
+            patientAppointments.removeLast()
+            ending = lastButOneAppointment.endTime
+        }
     }
 }
 
 // MARK: - Private methods
 
 private extension DoctorSchedule {
-    mutating func createAppointments() {
-        var appointmentTime = starting
+    mutating func createAppointments(on interval: DateInterval? = nil) {
+        var appointmentTime = interval?.start ?? starting
 
         repeat {
             let appointment = PatientAppointment(
@@ -133,6 +167,6 @@ private extension DoctorSchedule {
             )
             patientAppointments.append(appointment)
             appointmentTime.addTimeInterval(doctor.serviceDuration)
-        } while appointmentTime < ending
+        } while appointmentTime < interval?.end ?? ending
     }
 }
