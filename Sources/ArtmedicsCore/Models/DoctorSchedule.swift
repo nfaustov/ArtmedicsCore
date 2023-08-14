@@ -92,7 +92,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             .first(where: { $0.patient != nil }) {
             return nextReservedAppointment.scheduledTime.timeIntervalSince(appointment.scheduledTime)
         } else {
-            return 7200
+            return doctor.serviceDuration
         }
     }
     
