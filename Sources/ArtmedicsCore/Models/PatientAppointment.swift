@@ -42,7 +42,7 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
 
 extension PatientAppointment {
     public enum Status: String, Codable, CaseIterable, Identifiable {
-        case none =
+        case none
         case registered = "Зарегистрирован"
         case confirmed = "Подтвержден"
         case came = "Пришел"
