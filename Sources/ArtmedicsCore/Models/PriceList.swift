@@ -12,9 +12,7 @@ public final class PriceList {
             return categories
         } else {
             return categories.filter { category in
-                guard let items = category.items else { return false }
-
-                return !items
+                !category.items
                     .filter {
                         $0.title.localizedCaseInsensitiveContains(filterText) || $0.id.localizedCaseInsensitiveContains(filterText)
                     }
@@ -28,19 +26,15 @@ public extension PriceList {
     struct Category: Codable, Hashable, Identifiable {
         public let id: UUID
         public var title: String
-        public var subCategories: [Category]?
-        public var items: [PriceListItem]?
+        public var items: [PriceListItem]
 
-        public init(id: UUID = UUID(), title: String, subCategories: [Category]? = nil, items: [PriceListItem]? = nil) {
+        public init(id: UUID = UUID(), title: String, items: [PriceListItem]) {
             self.id = id
             self.title = title
-            self.subCategories = subCategories
             self.items = items
         }
 
         public func filteredItems(by filterText: String) -> [PriceListItem] {
-            guard let items = items else { return [] }
-
             if filterText.isEmpty {
                 return items
             } else {
