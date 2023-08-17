@@ -28,7 +28,7 @@ public extension PriceList {
         public var title: String
         public var items: [PriceListItem]
 
-        public init(id: UUID = UUID(), title: String, items: [PriceListItem]) {
+        public init(id: UUID = UUID(), title: String, items: [PriceListItem] = []) {
             self.id = id
             self.title = title
             self.items = items
