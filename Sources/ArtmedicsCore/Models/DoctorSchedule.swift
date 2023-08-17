@@ -92,12 +92,12 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             .first(where: { $0.patient != nil }) {
             return nextReservedAppointment.scheduledTime.timeIntervalSince(appointment.scheduledTime)
         } else {
-            return doctor.serviceDuration
+            return ending.timeIntervalSince(appointment.scheduledTime)
         }
     }
     
     /// Split long appointment to many appointments with doctor service duration.
-    /// Works only if appointments doesn't have a patients and appointment duration bigger than doctor service duration.
+    /// Works only if appointment doesn't have a patient and appointment duration is bigger than doctor service duration.
     /// - Parameter appointment: Appointment for split.
     public mutating func splitToBasicDurationIfNeeded(_ appointment: PatientAppointment) {
         if appointment.duration > doctor.serviceDuration, appointment.patient == nil {
