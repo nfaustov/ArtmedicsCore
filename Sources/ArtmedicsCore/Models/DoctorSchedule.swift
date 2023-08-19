@@ -65,7 +65,7 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             patientAppointments[index].update(patient: newAppointment.patient)
         } else if newAppointment.duration > patientAppointments[index].duration {
             let deletingAppointments = patientAppointments
-                .filter { (newAppointment.scheduledTime...newAppointment.endTime).contains($0.scheduledTime) }
+                .filter { (newAppointment.scheduledTime..<newAppointment.endTime).contains($0.scheduledTime) }
                 .dropFirst()
 
             guard deletingAppointments.compactMap({ $0.patient }).isEmpty else { return }
