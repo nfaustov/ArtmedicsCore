@@ -24,6 +24,18 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
         self.patient = patient
         self.status = status
     }
+
+    public init(from short: PatientAppointment.Short, patient: Patient? = nil) {
+        self.id = short.id
+        self.scheduledTime = short.scheduledTime
+        self.duration = short.duration
+        self.patient = patient
+        self.status = short.status
+    }
+
+    public var short: PatientAppointment.Short {
+        Short(id: id, scheduledTime: scheduledTime, duration: duration, patientId: patient?.id, status: status)
+    }
     
     /// Update patient property with checking if there is already registered patient.
     /// - Parameter patient: New patient with updates (can be nil)
