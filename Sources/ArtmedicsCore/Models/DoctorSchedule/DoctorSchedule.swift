@@ -69,31 +69,29 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
     /// Replace appointment with new appointment at the same scheduled time.
     /// - Parameters:
     ///   - newAppointment: New appointment with updates
-    public mutating func updateAppointments(with newAppointment: PatientAppointment) {
+    public mutating func replaceAppointments(with newAppointment: PatientAppointment) -> [PatientAppointment.Short] {
         guard let index = patientAppointments.firstIndex(
             where: { $0.scheduledTime == newAppointment.scheduledTime }
-        ) else { return }
+        ) else { return [] }
 
         if newAppointment.duration == patientAppointments[index].duration {
             patientAppointments[index].update(patient: newAppointment.patient)
+            return []
         } else if newAppointment.duration > patientAppointments[index].duration {
             let deletingAppointments = patientAppointments
-                .filter { (newAppointment.scheduledTime..<newAppointment.endTime).contains($0.scheduledTime) }
+                .filter { (newAppointment.scheduledTime..<newAppointment.endTime).contains($0.scheduledTime)
+                }
                 .dropFirst()
 
-            guard deletingAppointments.compactMap({ $0.patient }).isEmpty else { return }
+            guard deletingAppointments.compactMap({ $0.patient }).isEmpty else { return [] }
 
             patientAppointments.removeAll(where: { deletingAppointments.contains($0) })
             patientAppointments[index].update(patient: newAppointment.patient)
             patientAppointments[index].duration = newAppointment.duration
-            
-            if newAppointment.endTime > self.ending {
-                self.ending = newAppointment.endTime
-            }
+
+            return deletingAppointments.map { $0.short }
         } else {
-            preconditionFailure(
-                "Длительность приема слишком маленькая, необходимо по крайней мере \(doctor.serviceDuration / 60) мин."
-            )
+            return []
         }
     }
 
@@ -112,12 +110,21 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
     /// Split long appointment to many appointments with doctor service duration.
     /// Works only if appointment doesn't have a patient and appointment duration is bigger than doctor service duration.
     /// - Parameter appointment: Appointment for split.
-    public mutating func splitToBasicDurationIfNeeded(_ appointment: PatientAppointment) {
-        if appointment.duration > doctor.serviceDuration, appointment.patient == nil {
-            patientAppointments.removeAll(where: { $0.scheduledTime == appointment.scheduledTime })
-            createAppointments(
+    public func splitToBasicDurationAppointments(_ appointment: PatientAppointment) -> [PatientAppointment.Short] {
+        guard appointment.status == .cancelled else { return [] }
+
+        if appointment.duration > doctor.serviceDuration {
+            return createAppointments(
                 on: DateInterval(start: appointment.scheduledTime, duration: appointment.duration)
             )
+        } else {
+            return [
+                PatientAppointment.Short(
+                    scheduledTime: appointment.scheduledTime,
+                    duration: appointment.duration,
+                    status: .none
+                )
+            ]
         }
     }
     
@@ -169,8 +176,8 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
 // MARK: - Private methods
 
 private extension DoctorSchedule {
-    mutating func createAppointments(on interval: DateInterval? = nil) {
-        var appointmentTime = interval?.start ?? starting
+    mutating func createAppointments() {
+        var appointmentTime = starting
 
         repeat {
             let appointment = PatientAppointment(
@@ -180,6 +187,22 @@ private extension DoctorSchedule {
             )
             patientAppointments.append(appointment)
             appointmentTime.addTimeInterval(doctor.serviceDuration)
-        } while appointmentTime < interval?.end ?? ending
+        } while appointmentTime < ending
+    }
+
+    func createAppointments(on interval: DateInterval) -> [PatientAppointment.Short] {
+        var appointmentTime = interval.start
+        var appointments = [PatientAppointment]()
+
+        repeat {
+            let appointment = PatientAppointment(
+                scheduledTime: appointmentTime,
+                duration: doctor.serviceDuration,
+                patient: nil)
+            appointments.append(appointment)
+            appointmentTime.addTimeInterval(doctor.serviceDuration)
+        } while appointmentTime < interval.end
+
+        return appointments.map { $0.short }
     }
 }

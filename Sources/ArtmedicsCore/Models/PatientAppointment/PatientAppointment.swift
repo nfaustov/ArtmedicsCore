@@ -39,7 +39,7 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
     
     /// Update patient property with checking if there is already registered patient.
     /// - Parameter patient: New patient with updates (can be nil)
-    public mutating func update(patient: Patient?) {
+    mutating func update(patient: Patient?) {
         if let patient = patient {
             guard self.patient == nil else { return }
 
