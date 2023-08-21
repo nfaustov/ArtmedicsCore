@@ -28,6 +28,19 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
+    public init(from short: DoctorSchedule.Short, patientAppointments: [PatientAppointment]) {
+        self.id = short.id
+        self.doctor = short.doctor
+        self.cabinet = short.cabinet
+        self.starting = short.starting
+        self.ending = short.ending
+        self.patientAppointments = patientAppointments
+    }
+
+    public var short: DoctorSchedule.Short {
+        Short(id: id, doctor: doctor, cabinet: cabinet, starting: starting, ending: ending)
+    }
+
     public var scheduledPatients: Int {
         patientAppointments
             .compactMap { $0.patient }
