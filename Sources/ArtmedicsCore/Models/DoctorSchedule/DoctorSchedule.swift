@@ -111,10 +111,20 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
     /// Works only if appointment doesn't have a patient and appointment duration is bigger than doctor service duration.
     /// - Parameter appointment: Appointment for split.
     public func splitToBasicDurationAppointments(_ appointment: PatientAppointment) -> [PatientAppointment.Short] {
-        guard appointment.duration > doctor.serviceDuration else { return [] }
-        return createAppointments(
-            on: DateInterval(start: appointment.scheduledTime, duration: appointment.duration)
-        )
+        if appointment.duration > doctor.serviceDuration {
+            return createAppointments(
+                on: DateInterval(start: appointment.scheduledTime, duration: appointment.duration)
+            )
+        } else {
+            return [
+                PatientAppointment.Short(
+                        scheduledTime: appointment.scheduledTime,
+                        duration: appointment.duration,
+                        status: .none
+                )
+            ]
+        }
+
     }
     
     /// Create new empty appointment at the begining of schedule, starting time shifts early on doctor's duration time interval.
