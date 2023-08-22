@@ -85,50 +85,6 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             ]
         }
     }
-    
-    /// Create new empty appointment at the begining of schedule, starting time shifts early on doctor's duration time interval.
-    public mutating func extendStarting() {
-        let patientAppointment = PatientAppointment(
-            scheduledTime: starting.addingTimeInterval(-doctor.serviceDuration),
-            duration: doctor.serviceDuration,
-            patient: nil
-        )
-        starting = patientAppointment.scheduledTime
-        patientAppointments.insert(patientAppointment, at: 0)
-    }
-    
-    /// Create new empty appointment at the end of schedule, ending time shifts late on doctor's duration time interval.
-    public mutating func extendEnding() {
-        let patientAppointment = PatientAppointment(
-            scheduledTime: ending,
-            duration: doctor.serviceDuration,
-            patient: nil
-        )
-        ending = patientAppointment.endTime
-        patientAppointments.append(patientAppointment)
-    }
-    
-    /// Remove first appointment in schedule, starting time shifts late on deleted appointment duration interval.
-    public mutating func removeFirstAppointment() {
-        if let firstAppointment = patientAppointments.first,
-           let secondAppointment = patientAppointments.dropFirst().first {
-            guard firstAppointment.patient == nil else { return }
-
-            patientAppointments.removeFirst()
-            starting = secondAppointment.scheduledTime
-        }
-    }
-    
-    /// Remove last appointment in schedule, ending time shifts early on deleted appointment duration interval.
-    public mutating func removeLastAppointment() {
-        if let lastAppointment = patientAppointments.last,
-           let lastButOneAppointment = patientAppointments.dropLast().last {
-            guard lastAppointment.patient == nil else { return }
-
-            patientAppointments.removeLast()
-            ending = lastButOneAppointment.endTime
-        }
-    }
 }
 
 // MARK: - Private methods
