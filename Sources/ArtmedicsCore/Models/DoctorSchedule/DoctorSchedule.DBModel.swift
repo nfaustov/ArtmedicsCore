@@ -1,7 +1,7 @@
 import Foundation
 
 public extension DoctorSchedule {
-    struct Short: Codable, Equatable, Hashable, Identifiable {
+    struct DBModel: Codable, Equatable, Hashable, Identifiable {
         public let id: UUID
         public let doctor: Doctor
         public var cabinet: Int

@@ -25,30 +25,16 @@ public struct PatientAppointment: Codable, Hashable, Identifiable {
         self.status = status
     }
 
-    public init(from short: PatientAppointment.Short, patient: Patient? = nil) {
-        self.id = short.id
-        self.scheduledTime = short.scheduledTime
-        self.duration = short.duration
+    public init(from dbModel: PatientAppointment.DBModel, patient: Patient? = nil) {
+        self.id = dbModel.id
+        self.scheduledTime = dbModel.scheduledTime
+        self.duration = dbModel.duration
         self.patient = patient
-        self.status = short.status
+        self.status = dbModel.status
     }
 
-    public var short: PatientAppointment.Short {
-        Short(id: id, scheduledTime: scheduledTime, duration: duration, patientId: patient?.id, status: status)
-    }
-    
-    /// Update patient property with checking if there is already registered patient.
-    /// - Parameter patient: New patient with updates (can be nil)
-    mutating func update(patient: Patient?) {
-        if let patient = patient {
-            guard self.patient == nil else { return }
-
-            self.patient = patient
-            status = .registered
-        } else {
-            self.patient = nil
-            status = .cancelled
-        }
+    public var dbModel: PatientAppointment.DBModel {
+        DBModel(id: id, scheduledTime: scheduledTime, duration: duration, patientId: patient?.id, status: status)
     }
 }
 

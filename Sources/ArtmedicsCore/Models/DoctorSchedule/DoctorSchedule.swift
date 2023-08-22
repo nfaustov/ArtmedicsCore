@@ -28,17 +28,17 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
-    public init(from short: DoctorSchedule.Short, patientAppointments: [PatientAppointment]) {
-        self.id = short.id
-        self.doctor = short.doctor
-        self.cabinet = short.cabinet
-        self.starting = short.starting
-        self.ending = short.ending
+    public init(from dbModel: DoctorSchedule.DBModel, patientAppointments: [PatientAppointment]) {
+        self.id = dbModel.id
+        self.doctor = dbModel.doctor
+        self.cabinet = dbModel.cabinet
+        self.starting = dbModel.starting
+        self.ending = dbModel.ending
         self.patientAppointments = patientAppointments
     }
 
-    public var short: DoctorSchedule.Short {
-        Short(id: id, doctor: doctor, cabinet: cabinet, starting: starting, ending: ending)
+    public var dbModel: DoctorSchedule.DBModel {
+        DBModel(id: id, doctor: doctor, cabinet: cabinet, starting: starting, ending: ending)
     }
 
     public var scheduledPatients: Int {
@@ -55,46 +55,6 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         ending.timeIntervalSince(starting)
     }
 
-    /// Updates number of patient appointments, based on starting and ending properties.
-    /// Works only if appointments doesn't have a patients.
-    public mutating func updateAppointments() {
-        guard patientAppointments.compactMap({ $0.patient }).isEmpty else {
-            preconditionFailure("Невозможно выполнить операцию, в расписании есть записанные пациенты.")
-        }
-
-        patientAppointments.removeAll()
-        createAppointments()
-    }
-
-    /// Replace appointment with new appointment at the same scheduled time.
-    /// - Parameters:
-    ///   - newAppointment: New appointment with updates
-    public mutating func replaceAppointments(with newAppointment: PatientAppointment) -> [PatientAppointment.Short] {
-        guard let index = patientAppointments.firstIndex(
-            where: { $0.scheduledTime == newAppointment.scheduledTime }
-        ) else { return [] }
-
-        if newAppointment.duration == patientAppointments[index].duration {
-            patientAppointments[index].update(patient: newAppointment.patient)
-            return []
-        } else if newAppointment.duration > patientAppointments[index].duration {
-            let deletingAppointments = patientAppointments
-                .filter { (newAppointment.scheduledTime..<newAppointment.endTime).contains($0.scheduledTime)
-                }
-                .dropFirst()
-
-            guard deletingAppointments.compactMap({ $0.patient }).isEmpty else { return [] }
-
-            patientAppointments.removeAll(where: { deletingAppointments.contains($0) })
-            patientAppointments[index].update(patient: newAppointment.patient)
-            patientAppointments[index].duration = newAppointment.duration
-
-            return deletingAppointments.map { $0.short }
-        } else {
-            return []
-        }
-    }
-
     /// Calculate available duration for patient's appointment.
     /// - Parameter appointment: Appointment for calculation.
     public func maxServiceDuration(for appointment: PatientAppointment) -> TimeInterval {
@@ -106,25 +66,24 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
             return ending.timeIntervalSince(appointment.scheduledTime)
         }
     }
-    
-    /// Split long appointment to many appointments with doctor service duration.
-    /// Works only if appointment doesn't have a patient and appointment duration is bigger than doctor service duration.
-    /// - Parameter appointment: Appointment for split.
-    public func splitToBasicDurationAppointments(_ appointment: PatientAppointment) -> [PatientAppointment.Short] {
+
+    /// Split appointment to several appointments with doctor service duration.
+    /// - Parameter appointment: Appointment for splitting.
+    /// - Returns: Array of empty appointments which have been created on time interval of duration of given appointment.
+    public func splitToBasicDurationAppointments(_ appointment: PatientAppointment) -> [PatientAppointment.DBModel] {
         if appointment.duration > doctor.serviceDuration {
             return createAppointments(
                 on: DateInterval(start: appointment.scheduledTime, duration: appointment.duration)
             )
         } else {
             return [
-                PatientAppointment.Short(
+                PatientAppointment.DBModel(
                         scheduledTime: appointment.scheduledTime,
                         duration: appointment.duration,
                         status: .none
                 )
             ]
         }
-
     }
     
     /// Create new empty appointment at the begining of schedule, starting time shifts early on doctor's duration time interval.
@@ -189,7 +148,7 @@ private extension DoctorSchedule {
         } while appointmentTime < ending
     }
 
-    func createAppointments(on interval: DateInterval) -> [PatientAppointment.Short] {
+    func createAppointments(on interval: DateInterval) -> [PatientAppointment.DBModel] {
         var appointmentTime = interval.start
         var appointments = [PatientAppointment]()
 
@@ -202,6 +161,6 @@ private extension DoctorSchedule {
             appointmentTime.addTimeInterval(doctor.serviceDuration)
         } while appointmentTime < interval.end
 
-        return appointments.map { $0.short }
+        return appointments.map { $0.dbModel }
     }
 }
