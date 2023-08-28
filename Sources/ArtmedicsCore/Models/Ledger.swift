@@ -21,6 +21,17 @@ public struct Ledger: Codable, Hashable, Identifiable {
         self.payments = payments
     }
 
+    public func fraction(ofAccount type: Payment.PaymentType) -> Double {
+        switch type {
+        case .cash:
+            return cashBalance / balance
+        case .bank:
+            return bankBalance / balance
+        case .card:
+            return cardBalance / balance
+        }
+    }
+
     public mutating func payment(_ payment: Payment) {
         payments.append(payment)
 
