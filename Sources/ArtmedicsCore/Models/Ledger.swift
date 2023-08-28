@@ -50,7 +50,7 @@ public struct Payment: Codable, Hashable, Identifiable {
     public let createdAt: Date
     public let deletedAt: Date?
 
-    init(id: UUID = UUID(), title: String, type: PaymentType, amount: Double, createdAt: Date = Date(), deletedAt: Date? = nil) {
+    public init(id: UUID = UUID(), title: String, type: PaymentType, amount: Double, createdAt: Date = Date(), deletedAt: Date? = nil) {
         self.id = id
         self.title = title
         self.type = type
