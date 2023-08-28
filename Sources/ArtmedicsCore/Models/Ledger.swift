@@ -36,8 +36,8 @@ public struct Ledger: Codable, Hashable, Identifiable {
 
         switch payment.type {
         case .cash: cashBalance -= payment.amount
-        case .bank: cashBalance -= payment.amount
-        case .card: cashBalance -= payment.amount
+        case .bank: bankBalance -= payment.amount
+        case .card: cardBalance -= payment.amount
         }
     }
 }
