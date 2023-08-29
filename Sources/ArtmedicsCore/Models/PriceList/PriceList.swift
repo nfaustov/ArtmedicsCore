@@ -3,7 +3,7 @@ import Foundation
 public final class PriceList {
     public var categories: [Category]
 
-    public var items: [PriceListItem] {
+    public var items: [Item] {
         categories.flatMap { $0.items }
     }
 
