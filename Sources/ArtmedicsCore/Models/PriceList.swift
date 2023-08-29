@@ -3,6 +3,10 @@ import Foundation
 public final class PriceList {
     public var categories: [Category]
 
+    public var items: [PriceListItem] {
+        categories.flatMap { $0.items }
+    }
+
     public init(categories: [Category]) {
         self.categories = categories
     }

@@ -125,7 +125,7 @@ public struct RenderedService: Codable, Hashable, Identifiable {
     public let agent: Doctor?
     public let conclusion: Data?
 
-    public init(id: UUID = UUID(), priceListItem: PriceListItem, performer: Doctor, agent: Doctor?, conclusion: Data? = nil) {
+    public init(id: UUID = UUID(), priceListItem: PriceListItem, performer: Doctor, agent: Doctor? = nil, conclusion: Data? = nil) {
         self.id = id
         self.priceListItem = priceListItem
         self.performer = performer
