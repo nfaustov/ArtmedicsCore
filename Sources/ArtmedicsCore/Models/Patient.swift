@@ -120,12 +120,12 @@ public struct Check: Codable, Hashable, Identifiable {
 
 public struct RenderedService: Codable, Hashable, Identifiable {
     public let id: UUID
-    public let priceListItem: PriceListItem
+    public let priceListItem: PriceList.Item
     public let performer: Doctor
     public let agent: Doctor?
     public let conclusion: Data?
 
-    public init(id: UUID = UUID(), priceListItem: PriceListItem, performer: Doctor, agent: Doctor? = nil, conclusion: Data? = nil) {
+    public init(id: UUID = UUID(), priceListItem: PriceList.Item, performer: Doctor, agent: Doctor? = nil, conclusion: Data? = nil) {
         self.id = id
         self.priceListItem = priceListItem
         self.performer = performer
