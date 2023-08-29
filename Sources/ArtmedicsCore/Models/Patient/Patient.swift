@@ -33,7 +33,7 @@ public struct Patient: Codable, Hashable, Identifiable {
         self.visits = visits
     }
 
-    init(from dbModel: Patient.DBModel, visits: [Visit]) {
+    public init(from dbModel: Patient.DBModel, visits: [Visit]) {
         id = dbModel.id
         secondName = dbModel.secondName
         firstName = dbModel.firstName
