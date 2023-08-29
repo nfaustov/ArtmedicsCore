@@ -4,7 +4,7 @@ public struct Visit: Codable, Hashable, Identifiable {
     public let id: UUID
     public let registrationDate: Date
     public let visitDate: Date
-    public let check: Check?
+    public var check: Check?
 
     public init(id: UUID = UUID(), registrationDate: Date, visitDate: Date, check: Check? = nil) {
         self.id = id

@@ -30,5 +30,9 @@ public extension Patient {
             self.placeOfResidence = placeOfResidence
             self.treatmentPlan = treatmentPlan
         }
+
+        public var fullName: String {
+            secondName + " " + firstName + " " + patronymicName
+        }
     }
 }
