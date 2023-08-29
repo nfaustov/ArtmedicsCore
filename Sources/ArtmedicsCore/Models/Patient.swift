@@ -72,20 +72,33 @@ public struct TreatmentPlan: Codable, Hashable {
     public let kind: Kind
     public let startingDate: Date
     public let expirationDate: Date
+
+    public init(kind: Kind, startingDate: Date = Date()) {
+        self.kind = kind
+        self.startingDate = startingDate
+        self.expirationDate = Calendar.current.date(byAdding: .year, value: 1, to: startingDate)!
+    }
 }
 
 public struct Visit: Codable, Hashable, Identifiable {
     public let id: UUID
     public let registrationDate: Date
     public let visitDate: Date
-    public let check: Check
-    public let contract: Data?
+    public let check: Check?
+
+    public init(id: UUID = UUID(), registrationDate: Date, visitDate: Date, check: Check? = nil) {
+        self.id = id
+        self.registrationDate = registrationDate
+        self.visitDate = visitDate
+        self.check = check
+    }
 }
 
 public struct Check: Codable, Hashable, Identifiable {
     public let id: UUID
     public let services: [RenderedService]
     public let discount: Double
+    public let contract: Data?
 
     public var price: Double {
         services
@@ -96,12 +109,27 @@ public struct Check: Codable, Hashable, Identifiable {
     public var totalPrice: Double {
         price - discount
     }
+
+    public init(id: UUID = UUID(), services: [RenderedService], discount: Double = 0, contract: Data? = nil) {
+        self.id = id
+        self.services = services
+        self.discount = discount
+        self.contract = contract
+    }
 }
 
 public struct RenderedService: Codable, Hashable, Identifiable {
     public let id: UUID
     public let priceListItem: PriceListItem
     public let performer: Doctor
-    public let agent: Doctor
+    public let agent: Doctor?
     public let conclusion: Data?
+
+    public init(id: UUID = UUID(), priceListItem: PriceListItem, performer: Doctor, agent: Doctor?, conclusion: Data? = nil) {
+        self.id = id
+        self.priceListItem = priceListItem
+        self.performer = performer
+        self.agent = agent
+        self.conclusion = conclusion
+    }
 }
