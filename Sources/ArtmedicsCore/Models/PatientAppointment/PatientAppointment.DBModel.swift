@@ -1,7 +1,7 @@
 import Foundation
 
 public extension PatientAppointment {
-    struct DBModel: Codable, Equatable, Hashable, Identifiable {
+    struct DBModel: Codable {
         public let id: UUID
         public let scheduledTime: Date
         public var duration: TimeInterval
