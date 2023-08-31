@@ -16,9 +16,9 @@ public struct Visit: Codable, Hashable, Identifiable {
 
 public struct Check: Codable, Hashable, Identifiable {
     public let id: UUID
-    public let services: [RenderedService]
-    public let discount: Double
-    public let contract: Data?
+    public var services: [RenderedService]
+    public var discount: Double
+    public var contract: Data?
 
     public var price: Double {
         services
@@ -41,9 +41,9 @@ public struct Check: Codable, Hashable, Identifiable {
 public struct RenderedService: Codable, Hashable, Identifiable {
     public let id: UUID
     public let priceListItem: PriceList.Item
-    public let performer: Doctor
-    public let agent: Doctor?
-    public let conclusion: Data?
+    public var performer: Doctor
+    public var agent: Doctor?
+    public var conclusion: Data?
 
     public init(id: UUID = UUID(), priceListItem: PriceList.Item, performer: Doctor, agent: Doctor? = nil, conclusion: Data? = nil) {
         self.id = id
