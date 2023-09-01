@@ -72,7 +72,7 @@ public struct Payment: Codable, Hashable, Identifiable {
 }
 
 public extension Payment {
-    enum PaymentType: String, Codable, Hashable {
+    enum PaymentType: String, Codable, Hashable, CaseIterable {
         case cash = "Наличные"
         case bank = "Терминал"
         case card = "Карта"
