@@ -37,19 +37,3 @@ public struct Bill: Codable, Hashable, Identifiable {
         self.contract = contract
     }
 }
-
-public struct RenderedService: Codable, Hashable, Identifiable {
-    public let id: UUID
-    public let priceListItem: PriceList.Item
-    public var performer: Doctor
-    public var agent: Doctor?
-    public var conclusion: Data?
-
-    public init(id: UUID = UUID(), priceListItem: PriceList.Item, performer: Doctor, agent: Doctor? = nil, conclusion: Data? = nil) {
-        self.id = id
-        self.priceListItem = priceListItem
-        self.performer = performer
-        self.agent = agent
-        self.conclusion = conclusion
-    }
-}

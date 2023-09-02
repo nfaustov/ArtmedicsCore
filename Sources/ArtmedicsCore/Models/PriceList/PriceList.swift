@@ -24,4 +24,12 @@ public final class PriceList {
             }
         }
     }
+
+    public func categoryForItem(_ pricelistItem: PriceList.Item) -> Category {
+        if let category = categories.first(where: { $0.items.contains(where: { $0.id == pricelistItem.id }) }) {
+            return category
+        } else {
+            return Category(title: "Другие")
+        }
+    }
 }
