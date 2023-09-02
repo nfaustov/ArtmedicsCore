@@ -22,7 +22,7 @@ public struct Bill: Codable, Hashable, Identifiable {
 
     public var price: Double {
         services
-            .map { $0.priceListItem.price }
+            .map { $0.pricelistItem.price }
             .reduce(0.0, +)
     }
 
