@@ -4,9 +4,9 @@ public struct Visit: Codable, Hashable, Identifiable {
     public let id: UUID
     public let registrationDate: Date
     public let visitDate: Date
-    public var check: Check?
+    public var check: Bill?
 
-    public init(id: UUID = UUID(), registrationDate: Date, visitDate: Date, check: Check? = nil) {
+    public init(id: UUID = UUID(), registrationDate: Date, visitDate: Date, check: Bill? = nil) {
         self.id = id
         self.registrationDate = registrationDate
         self.visitDate = visitDate
@@ -14,7 +14,7 @@ public struct Visit: Codable, Hashable, Identifiable {
     }
 }
 
-public struct Check: Codable, Hashable, Identifiable {
+public struct Bill: Codable, Hashable, Identifiable {
     public let id: UUID
     public var services: [RenderedService]
     public var discount: Double
