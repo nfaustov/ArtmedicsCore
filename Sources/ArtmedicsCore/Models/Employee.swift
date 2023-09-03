@@ -14,9 +14,9 @@ public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
 }
 
 public enum SalaryType: Codable, Hashable {
-    case pieceRate(rate: Double)
-    case monthly(amount: Int)
-    case hourly(amount: Int)
+    case pieceRate(rate: Double = 0.4)
+    case monthly(amount: Int = 0)
+    case hourly(amount: Int = 0)
 
     public var title: String {
         switch self {
