@@ -18,7 +18,7 @@ public enum SalaryType: Codable, Hashable {
     case monthly(amount: Int)
     case hourly(amount: Int)
 
-    var title: String {
+    public var title: String {
         switch self {
         case .pieceRate:
             return "Сдельная"
@@ -26,6 +26,30 @@ public enum SalaryType: Codable, Hashable {
             return "Ежемесячная"
         case .hourly:
             return "Почасовая"
+        }
+    }
+
+    public static var allCasesTitles: [String] {
+        ["Сдельная", "Ежемесячная", "Почасовая"]
+    }
+
+    public init?(title: String, rate: Double) {
+        switch title {
+        case "Сдельная":
+            self = .pieceRate(rate: rate)
+        default:
+            return nil
+        }
+    }
+
+    public init?(title: String, amount: Int) {
+        switch title {
+        case "Ежемесячная":
+            self = .monthly(amount: amount)
+        case "Почасовая":
+            self = .hourly(amount: amount)
+        default:
+            return nil
         }
     }
 }
