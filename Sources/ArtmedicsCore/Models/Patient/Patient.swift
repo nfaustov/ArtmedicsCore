@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Patient: Codable, Hashable, Identifiable {
+public struct Patient: Person, Codable, Hashable, Identifiable {
     public let id: UUID
     public var secondName: String
     public var firstName: String
@@ -56,9 +56,5 @@ public struct Patient: Codable, Hashable, Identifiable {
             placeOfResidence: placeOfResidence,
             treatmentPlan: treatmentPlan
         )
-    }
-
-    public var fullName: String {
-        secondName + " " + firstName + " " + patronymicName
     }
 }

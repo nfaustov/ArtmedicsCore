@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Doctor: Codable, Hashable, Identifiable {
+public struct Doctor: Employee, Codable, Hashable, Identifiable {
     public enum Specialization: String, Codable, CaseIterable, Hashable, Identifiable {
         case gynecologist = "Гинеколог"
         case therapist = "Терапевт"
@@ -28,19 +28,9 @@ public struct Doctor: Codable, Hashable, Identifiable {
     public var basicServiceId: String
     public var serviceDuration: TimeInterval
     public var defaultCabinet: Int
+    public var salaryType: SalaryType
     public var info: String
     public var imageUrl: String
-
-    public var fullName: String {
-        secondName + " " + firstName + " " + patronymicName
-    }
-
-    public var initials: String {
-        guard let firstNameLetter = firstName.first,
-              let patronymicNameLetter = patronymicName.first else { return secondName }
-
-        return "\(secondName) \(firstNameLetter).\(patronymicNameLetter)"
-    }
 
     public init(
         id: UUID = UUID(),
@@ -53,6 +43,7 @@ public struct Doctor: Codable, Hashable, Identifiable {
         basicServiceId: String = "",
         serviceDuration: TimeInterval,
         defaultCabinet: Int,
+        salaryType: SalaryType,
         info: String = "",
         imageUrl: String = ""
     ) {
@@ -66,7 +57,19 @@ public struct Doctor: Codable, Hashable, Identifiable {
         self.basicServiceId = basicServiceId
         self.serviceDuration = serviceDuration
         self.defaultCabinet = defaultCabinet
+        self.salaryType = salaryType
         self.info = info
         self.imageUrl = imageUrl
+    }
+
+    public var employee: AnyEmployee {
+        AnyEmployee(
+            id: id,
+            secondName: secondName,
+            firstName: firstName,
+            patronymicName: patronymicName,
+            phoneNumber: phoneNumber,
+            salaryType: salaryType
+        )
     }
 }

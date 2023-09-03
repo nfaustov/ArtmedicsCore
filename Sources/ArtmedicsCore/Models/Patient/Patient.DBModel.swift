@@ -1,12 +1,12 @@
 import Foundation
 
 public extension Patient {
-    struct DBModel: Codable, Hashable, Identifiable {
+    struct DBModel: Person, Codable, Hashable, Identifiable {
         public let id: UUID
-        public let secondName: String
-        public let firstName: String
-        public let patronymicName: String
-        public let phoneNumber: String
+        public var secondName: String
+        public var firstName: String
+        public var patronymicName: String
+        public var phoneNumber: String
         public var passport: PassportData?
         public var placeOfResidence: PlaceOfResidence?
         public var treatmentPlan: TreatmentPlan?
@@ -29,10 +29,6 @@ public extension Patient {
             self.passport = passport
             self.placeOfResidence = placeOfResidence
             self.treatmentPlan = treatmentPlan
-        }
-
-        public var fullName: String {
-            secondName + " " + firstName + " " + patronymicName
         }
     }
 }
