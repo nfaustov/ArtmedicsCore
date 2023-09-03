@@ -13,7 +13,7 @@ public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
     public var salaryType: SalaryType
 }
 
-public enum SalaryType: Codable, Hashable {
+public enum SalaryType: Codable, Hashable, CaseIterable {
     case pieceRate(rate: Double = 0.4)
     case monthly(amount: Int = 0)
     case hourly(amount: Int = 0)
@@ -29,27 +29,7 @@ public enum SalaryType: Codable, Hashable {
         }
     }
 
-    public static var allCasesTitles: [String] {
-        ["Сдельная", "Ежемесячная", "Почасовая"]
-    }
-
-    public init?(title: String, rate: Double) {
-        switch title {
-        case "Сдельная":
-            self = .pieceRate(rate: rate)
-        default:
-            return nil
-        }
-    }
-
-    public init?(title: String, amount: Int) {
-        switch title {
-        case "Ежемесячная":
-            self = .monthly(amount: amount)
-        case "Почасовая":
-            self = .hourly(amount: amount)
-        default:
-            return nil
-        }
+    public static var allCases: [SalaryType] {
+        [.pieceRate(), .monthly(), .hourly()]
     }
 }
