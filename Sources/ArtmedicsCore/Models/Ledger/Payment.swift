@@ -1,9 +1,9 @@
 import Foundation
 
-public struct Transaction: Codable, Hashable, Identifiable {
+public struct Payment: Codable, Hashable, Identifiable {
     public let id: UUID
     public let title: String
-    public let payments: [Payment]
+    public let types: [PaymentType]
     public var bill: Bill?
     public let createdAt: Date
     public let deletedAt: Date?
@@ -11,22 +11,22 @@ public struct Transaction: Codable, Hashable, Identifiable {
     public init(
         id: UUID = UUID(),
         title: String,
-        payments: [Payment],
+        types: [PaymentType],
         bill: Bill? = nil,
         createdAt: Date = Date(),
         deletedAt: Date? = nil
     ) {
         self.id = id
         self.title = title
-        self.payments = payments
+        self.types = types
         self.bill = bill
         self.createdAt = createdAt
         self.deletedAt = deletedAt
     }
 }
 
-public extension Transaction {
-    enum Payment: Codable, Hashable, CaseIterable {
+public extension Payment {
+    enum PaymentType: Codable, Hashable, CaseIterable {
         case cash(_ amount: Double = 0)
         case bank(_ amount: Double = 0)
         case card(_ amount: Double = 0)
@@ -39,7 +39,7 @@ public extension Transaction {
             }
         }
 
-        public static var allCases: [Transaction.Payment] {
+        public static var allCases: [Payment.PaymentType] {
             [.cash(), .bank(), .card()]
         }
     }

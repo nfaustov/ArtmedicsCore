@@ -6,22 +6,22 @@ public struct Report: Codable, Hashable, Identifiable {
     public var cashBalance: Double
     public var bankBalance: Double
     public var cardBalance: Double
-    public var transactions: [Transaction] = []
+    public var payments: [Payment] = []
 
     public var balance: Double {
         cashBalance + bankBalance + cardBalance
     }
 
-    public init(id: UUID = UUID(), date: Date, cashBalance: Double, bankBalance: Double, cardBalance: Double, transactions: [Transaction]) {
+    public init(id: UUID = UUID(), date: Date, cashBalance: Double, bankBalance: Double, cardBalance: Double, payments: [Payment]) {
         self.id = id
         self.date = date
         self.cashBalance = cashBalance
         self.bankBalance = bankBalance
         self.cardBalance = cardBalance
-        self.transactions = transactions
+        self.payments = payments
     }
 
-    public func fraction(ofAccount type: Transaction.Payment) -> Double {
+    public func fraction(ofAccount type: Payment.PaymentType) -> Double {
         switch type {
         case .cash:
             return cashBalance / balance
@@ -32,11 +32,11 @@ public struct Report: Codable, Hashable, Identifiable {
         }
     }
 
-    public mutating func transaction(_ transaction: Transaction) {
-        transactions.append(transaction)
+    public mutating func payment(_ payment: Payment) {
+        payments.append(payment)
 
-        transaction.payments.forEach { payment in
-            switch payment {
+        payment.types.forEach { type in
+            switch type {
             case .cash(let amount): cashBalance += amount
             case .bank(let amount): bankBalance += amount
             case .card(let amount): cardBalance += amount

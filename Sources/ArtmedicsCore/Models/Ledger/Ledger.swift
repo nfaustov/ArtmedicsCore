@@ -11,7 +11,7 @@ public final class Ledger: Codable {
         self.paymentSources = paymentSources
     }
 
-    public func balance(_ type: Transaction.Payment? = nil) -> Double {
+    public func balance(_ type: Payment.PaymentType? = nil) -> Double {
         if let type {
             var value = [Double]()
 
@@ -31,7 +31,7 @@ public final class Ledger: Codable {
         }
     }
 
-    public func fraction(ofAccount type: Transaction.Payment) -> Double {
+    public func fraction(ofAccount type: Payment.PaymentType) -> Double {
         balance(type) / balance()
     }
 }
