@@ -27,11 +27,11 @@ public struct Transaction: Codable, Hashable, Identifiable {
 
 public extension Transaction {
     enum Payment: Codable, Hashable, CaseIterable {
-        case cash(amount: Double = 0)
-        case bank(amount: Double = 0)
-        case card(amount: Double = 0)
+        case cash(_ amount: Double = 0)
+        case bank(_ amount: Double = 0)
+        case card(_ amount: Double = 0)
 
-        var title: String {
+        public var title: String {
             switch self {
             case .cash: return "Наличные"
             case .bank: return "Терминал"
