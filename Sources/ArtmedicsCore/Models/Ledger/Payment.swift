@@ -23,6 +23,20 @@ public struct Payment: Codable, Hashable, Identifiable {
         self.createdAt = createdAt
         self.deletedAt = deletedAt
     }
+
+    public var totalAmount: Double {
+        var value = 0.0
+
+        types.forEach { type in
+            switch type {
+            case .cash(let amount): value += amount
+            case .bank(let amount): value += amount
+            case .card(let amount): value += amount
+            }
+        }
+
+        return value
+    }
 }
 
 public extension Payment {
