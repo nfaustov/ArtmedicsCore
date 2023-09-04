@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Employee: Person {
-    var salaryType: SalaryType { get set }
+    var salary: Salary { get set }
 }
 
 public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
@@ -10,10 +10,11 @@ public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
     public var firstName: String
     public var patronymicName: String
     public var phoneNumber: String
-    public var salaryType: SalaryType
+    public var balance: Double
+    public var salary: Salary
 }
 
-public enum SalaryType: Codable, Hashable, CaseIterable {
+public enum Salary: Codable, Hashable, CaseIterable {
     case pieceRate(rate: Double = 0.4)
     case monthly(amount: Int = 0)
     case hourly(amount: Int = 0)
@@ -29,7 +30,7 @@ public enum SalaryType: Codable, Hashable, CaseIterable {
         }
     }
 
-    public static var allCases: [SalaryType] {
+    public static var allCases: [Salary] {
         [.pieceRate(), .monthly(), .hourly()]
     }
 }

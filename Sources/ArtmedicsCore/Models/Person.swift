@@ -1,6 +1,10 @@
 import Foundation
 
-public protocol Person {
+public protocol Accountable {
+    var balance: Double { get set }
+}
+
+public protocol Person: Accountable {
     var id: UUID { get }
     var secondName: String { get set }
     var firstName: String { get set }

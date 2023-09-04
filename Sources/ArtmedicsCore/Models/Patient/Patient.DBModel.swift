@@ -7,6 +7,7 @@ public extension Patient {
         public var firstName: String
         public var patronymicName: String
         public var phoneNumber: String
+        public var balance: Double
         public var passport: PassportData?
         public var placeOfResidence: PlaceOfResidence?
         public var treatmentPlan: TreatmentPlan?
@@ -17,6 +18,7 @@ public extension Patient {
             firstName: String,
             patronymicName: String,
             phoneNumber: String,
+            balance: Double = 0,
             passport: PassportData? = nil,
             placeOfResidence: PlaceOfResidence? = nil,
             treatmentPlan: TreatmentPlan? = nil
@@ -26,6 +28,7 @@ public extension Patient {
             self.firstName = firstName
             self.patronymicName = patronymicName
             self.phoneNumber = phoneNumber
+            self.balance = balance
             self.passport = passport
             self.placeOfResidence = placeOfResidence
             self.treatmentPlan = treatmentPlan

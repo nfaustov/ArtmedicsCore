@@ -6,6 +6,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
     public var firstName: String
     public var patronymicName: String
     public var phoneNumber: String
+    public var balance: Double
     public var passport: PassportData?
     public var placeOfResidence: PlaceOfResidence?
     public var treatmentPlan: TreatmentPlan?
@@ -17,6 +18,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         firstName: String,
         patronymicName: String,
         phoneNumber: String,
+        balance: Double = 0,
         passport: PassportData? = nil,
         placeOfResidence: PlaceOfResidence? = nil,
         treatmentPlan: TreatmentPlan? = nil,
@@ -27,6 +29,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         self.firstName = firstName
         self.patronymicName = patronymicName
         self.phoneNumber = phoneNumber
+        self.balance = balance
         self.passport = passport
         self.placeOfResidence = placeOfResidence
         self.treatmentPlan = treatmentPlan
@@ -39,6 +42,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         firstName = dbModel.firstName
         patronymicName = dbModel.patronymicName
         phoneNumber = dbModel.phoneNumber
+        balance = dbModel.balance
         passport = dbModel.passport
         placeOfResidence = dbModel.placeOfResidence
         treatmentPlan = dbModel.treatmentPlan
@@ -52,6 +56,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
             firstName: firstName,
             patronymicName: patronymicName,
             phoneNumber: phoneNumber,
+            balance: balance,
             passport: passport,
             placeOfResidence: placeOfResidence,
             treatmentPlan: treatmentPlan
