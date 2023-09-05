@@ -12,13 +12,39 @@ public struct Report: Codable, Hashable, Identifiable {
         cashBalance + bankBalance + cardBalance
     }
 
-    public init(id: UUID = UUID(), date: Date, cashBalance: Double, bankBalance: Double, cardBalance: Double, payments: [Payment]) {
+    public init(
+        id: UUID = UUID(),
+        date: Date,
+        cashBalance: Double,
+        bankBalance: Double,
+        cardBalance: Double,
+        payments: [Payment]
+    ) {
         self.id = id
         self.date = date
         self.cashBalance = cashBalance
         self.bankBalance = bankBalance
         self.cardBalance = cardBalance
         self.payments = payments
+    }
+
+    public init(from dbModel: Report.DBModel, payments: [Payment]) {
+        self.id = dbModel.id
+        self.date = dbModel.date
+        self.cashBalance = dbModel.cashBalance
+        self.bankBalance = dbModel.bankBalance
+        self.cardBalance = dbModel.cardBalance
+        self.payments = payments
+    }
+
+    public var dbModel: Report.DBModel {
+        DBModel(
+            id: id,
+            date: date,
+            cashBalance: cashBalance,
+            bankBalance: bankBalance,
+            cardBalance: cardBalance
+        )
     }
 
     public func fraction(ofAccount type: Payment.PaymentType) -> Double {
@@ -29,18 +55,6 @@ public struct Report: Codable, Hashable, Identifiable {
             return bankBalance / balance
         case .card:
             return cardBalance / balance
-        }
-    }
-
-    public mutating func payment(_ payment: Payment) {
-        payments.append(payment)
-
-        payment.types.forEach { type in
-            switch type {
-            case .cash(let amount): cashBalance += amount
-            case .bank(let amount): bankBalance += amount
-            case .card(let amount): cardBalance += amount
-            }
         }
     }
 }
