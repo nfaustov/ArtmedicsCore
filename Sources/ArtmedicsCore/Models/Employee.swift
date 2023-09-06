@@ -2,6 +2,7 @@ import Foundation
 
 public protocol Employee: Person {
     var salary: Salary { get set }
+    var agentFee: Double { get set }
 }
 
 public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
@@ -12,6 +13,7 @@ public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
     public var phoneNumber: String
     public var balance: Double
     public var salary: Salary
+    public var agentFee: Double
 }
 
 public enum Salary: Codable, Hashable, CaseIterable {

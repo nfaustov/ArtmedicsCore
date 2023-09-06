@@ -29,6 +29,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
     public var serviceDuration: TimeInterval
     public var defaultCabinet: Int
     public var salary: Salary
+    public var agentFee: Double
     public var balance: Double
     public var info: String
     public var imageUrl: String
@@ -45,6 +46,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
         serviceDuration: TimeInterval,
         defaultCabinet: Int,
         salary: Salary,
+        agentFee: Double = 0,
         balance: Double = 0,
         info: String = "",
         imageUrl: String = ""
@@ -60,6 +62,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
         self.serviceDuration = serviceDuration
         self.defaultCabinet = defaultCabinet
         self.salary = salary
+        self.agentFee = agentFee
         self.balance = balance
         self.info = info
         self.imageUrl = imageUrl
@@ -73,7 +76,8 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
             patronymicName: patronymicName,
             phoneNumber: phoneNumber,
             balance: balance,
-            salary: salary
+            salary: salary,
+            agentFee: agentFee
         )
     }
 }
