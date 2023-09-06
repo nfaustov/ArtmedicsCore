@@ -6,22 +6,19 @@ public struct Payment: Codable, Hashable, Identifiable {
     public let types: [PaymentType]
     public var bill: Bill?
     public let createdAt: Date
-    public let deletedAt: Date?
 
     public init(
         id: UUID = UUID(),
         title: String,
         types: [PaymentType],
         bill: Bill? = nil,
-        createdAt: Date = Date(),
-        deletedAt: Date? = nil
+        createdAt: Date = Date()
     ) {
         self.id = id
         self.title = title
         self.types = types
         self.bill = bill
         self.createdAt = createdAt
-        self.deletedAt = deletedAt
     }
 
     public var totalAmount: Double {
