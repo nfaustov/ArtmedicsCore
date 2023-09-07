@@ -50,16 +50,25 @@ public extension Payment {
             }
         }
 
-        public static var allCases: [Payment.PaymentType] {
-            [.cash(), .bank(), .card()]
+        public var value: Double {
+            get {
+                switch self {
+                case .cash(let amount): return amount
+                case .bank(let amount): return amount
+                case .card(let amount): return amount
+                }
+            }
+            set {
+                switch self {
+                case .cash: self = .card(newValue)
+                case .bank: self = .bank(newValue)
+                case .card: self = .card(newValue)
+                }
+            }
         }
 
-        public func amount(_ amount: Double) -> Self {
-            switch self {
-            case .cash: return .cash(amount)
-            case .bank: return .bank(amount)
-            case .card: return .card(amount)
-            }
+        public static var allCases: [Payment.PaymentType] {
+            [.cash(), .bank(), .card()]
         }
     }
 }
