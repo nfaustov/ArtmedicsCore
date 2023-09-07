@@ -60,7 +60,7 @@ public extension Payment {
             }
             set {
                 switch self {
-                case .cash: self = .card(newValue)
+                case .cash: self = .cash(newValue)
                 case .bank: self = .bank(newValue)
                 case .card: self = .card(newValue)
                 }
