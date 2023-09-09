@@ -4,30 +4,17 @@ public struct Report: Codable, Hashable, Identifiable {
     public let id: UUID
     public let date: Date
     public let startingCash: Double
-    public var cashIncome: Double
-    public var bankIncome: Double
-    public var cardIncome: Double
     public var payments: [Payment] = []
-
-    public var income: Double {
-        cashIncome + bankIncome + cardIncome
-    }
 
     public init(
         id: UUID = UUID(),
         date: Date,
         startingCash: Double,
-        cashIncome: Double,
-        bankIncome: Double,
-        cardIncome: Double,
         payments: [Payment]
     ) {
         self.id = id
         self.date = date
         self.startingCash = startingCash
-        self.cashIncome = cashIncome
-        self.bankIncome = bankIncome
-        self.cardIncome = cardIncome
         self.payments = payments
     }
 
@@ -35,9 +22,6 @@ public struct Report: Codable, Hashable, Identifiable {
         self.id = dbModel.id
         self.date = dbModel.date
         self.startingCash = dbModel.startingCash
-        self.cashIncome = dbModel.cashIncome
-        self.bankIncome = dbModel.bankIncome
-        self.cardIncome = dbModel.cardIncome
         self.payments = payments
     }
 
@@ -45,25 +29,53 @@ public struct Report: Codable, Hashable, Identifiable {
         DBModel(
             id: id,
             date: date,
-            startingCash: startingCash,
-            cashIncome: cashIncome,
-            bankIncome: bankIncome,
-            cardIncome: cardIncome
+            startingCash: startingCash
         )
     }
 
-    public var cashBalance: Double {
-        startingCash + cashIncome
+    public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
+        switch reporting {
+        case .balance:
+            var balance = paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
+
+            if type == .cash() || type == nil {
+               balance += startingCash
+            }
+
+            return balance
+        case .income:
+            return paymentTypes(ofType: type)
+                .filter { $0.value > 0 }
+                .reduce(0.0) { $0 + $1.value }
+        case .expense:
+            return paymentTypes(ofType: type)
+                .filter { $0.value < 0 }
+                .reduce(0.0) { $0 + $1.value}
+        }
     }
 
-    public func fraction(ofAccount type: PaymentType) -> Double {
+    public func incomeFraction(ofAccount type: PaymentType) -> Double {
         switch type {
         case .cash:
-            return cashIncome / income
+            return reporting(.income, of: .cash()) / reporting(.income)
         case .bank:
-            return bankIncome / income
+            return reporting(.income, of: .bank()) / reporting(.income)
         case .card:
-            return cardIncome / income
+            return reporting(.income, of: .card()) / reporting(.income)
+        }
+    }
+}
+
+// MARK: - Private methods
+
+private extension Report {
+    func paymentTypes(ofType type: PaymentType?) -> [PaymentType] {
+        if let type {
+            return payments
+                .flatMap { $0.types }
+                .filter { $0.isSameTypeAs(type) }
+        } else {
+            return payments.flatMap { $0.types }
         }
     }
 }

@@ -5,24 +5,15 @@ public extension Report {
         public let id: UUID
         public let date: Date
         public let startingCash: Double
-        public var cashIncome: Double
-        public var bankIncome: Double
-        public var cardIncome: Double
 
         init(
             id: UUID,
             date: Date,
-            startingCash: Double,
-            cashIncome: Double,
-            bankIncome: Double,
-            cardIncome: Double
+            startingCash: Double
         ) {
             self.id = id
             self.date = date
             self.startingCash = startingCash
-            self.cashIncome = cashIncome
-            self.bankIncome = bankIncome
-            self.cardIncome = cardIncome
         }
     }
 }

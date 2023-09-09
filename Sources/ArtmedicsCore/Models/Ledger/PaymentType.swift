@@ -33,4 +33,8 @@ public enum PaymentType: Codable, Hashable, CaseIterable {
     public static var allCases: [PaymentType] {
         [.cash(), .bank(), .card()]
     }
+
+    public func isSameTypeAs(_ type: PaymentType) -> Bool {
+        title == type.title
+    }
 }

@@ -11,24 +11,19 @@ public final class Ledger: Codable {
         self.paymentSources = paymentSources
     }
 
-    public func income(_ type: PaymentType? = nil) -> Double {
-        if let type {
-            switch type {
-            case .cash:
-                return reports.map { $0.cashIncome }.reduce(0.0, +)
-            case .bank:
-                return  reports.map { $0.bankIncome }.reduce(0.0, +)
-            case .card:
-                return reports.map { $0.cardIncome }.reduce(0.0, +)
-            }
-        } else {
-            return reports
-                .map { $0.income }
-                .reduce(0.0, +)
-        }
+    public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
+        reports
+            .map { $0.reporting(reporting, of: type) }
+            .reduce(0.0, +)
     }
 
-    public func fraction(ofAccount type: PaymentType) -> Double {
-        income(type) / income()
+    public func incomeFraction(ofAccount type: PaymentType) -> Double {
+        reporting(.income, of: type) / reporting(.income)
     }
+}
+
+public enum Reporting {
+    case balance
+    case income
+    case expense
 }
