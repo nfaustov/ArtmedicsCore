@@ -47,7 +47,7 @@ public struct Report: Codable, Hashable, Identifiable {
         )
     }
 
-    public func fraction(ofAccount type: Payment.PaymentType) -> Double {
+    public func fraction(ofAccount type: PaymentType) -> Double {
         switch type {
         case .cash:
             return cashBalance / balance
