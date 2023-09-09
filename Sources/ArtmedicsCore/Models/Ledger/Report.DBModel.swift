@@ -4,22 +4,25 @@ public extension Report {
     struct DBModel: Codable, Hashable, Identifiable {
         public let id: UUID
         public let date: Date
-        public var cashBalance: Double
-        public var bankBalance: Double
-        public var cardBalance: Double
+        public let startingCash: Double
+        public var cashIncome: Double
+        public var bankIncome: Double
+        public var cardIncome: Double
 
         init(
             id: UUID,
             date: Date,
-            cashBalance: Double,
-            bankBalance: Double,
-            cardBalance: Double
+            startingCash: Double,
+            cashIncome: Double,
+            bankIncome: Double,
+            cardIncome: Double
         ) {
             self.id = id
             self.date = date
-            self.cashBalance = cashBalance
-            self.bankBalance = bankBalance
-            self.cardBalance = cardBalance
+            self.startingCash = startingCash
+            self.cashIncome = cashIncome
+            self.bankIncome = bankIncome
+            self.cardIncome = cardIncome
         }
     }
 }

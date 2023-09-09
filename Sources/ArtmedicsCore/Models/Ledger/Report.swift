@@ -3,37 +3,41 @@ import Foundation
 public struct Report: Codable, Hashable, Identifiable {
     public let id: UUID
     public let date: Date
-    public var cashBalance: Double
-    public var bankBalance: Double
-    public var cardBalance: Double
+    public let startingCash: Double
+    public var cashIncome: Double
+    public var bankIncome: Double
+    public var cardIncome: Double
     public var payments: [Payment] = []
 
-    public var balance: Double {
-        cashBalance + bankBalance + cardBalance
+    public var income: Double {
+        cashIncome + bankIncome + cardIncome
     }
 
     public init(
         id: UUID = UUID(),
         date: Date,
-        cashBalance: Double,
-        bankBalance: Double,
-        cardBalance: Double,
+        startingCash: Double,
+        cashIncome: Double,
+        bankIncome: Double,
+        cardIncome: Double,
         payments: [Payment]
     ) {
         self.id = id
         self.date = date
-        self.cashBalance = cashBalance
-        self.bankBalance = bankBalance
-        self.cardBalance = cardBalance
+        self.startingCash = startingCash
+        self.cashIncome = cashIncome
+        self.bankIncome = bankIncome
+        self.cardIncome = cardIncome
         self.payments = payments
     }
 
     public init(from dbModel: Report.DBModel, payments: [Payment]) {
         self.id = dbModel.id
         self.date = dbModel.date
-        self.cashBalance = dbModel.cashBalance
-        self.bankBalance = dbModel.bankBalance
-        self.cardBalance = dbModel.cardBalance
+        self.startingCash = dbModel.startingCash
+        self.cashIncome = dbModel.cashIncome
+        self.bankIncome = dbModel.bankIncome
+        self.cardIncome = dbModel.cardIncome
         self.payments = payments
     }
 
@@ -41,20 +45,25 @@ public struct Report: Codable, Hashable, Identifiable {
         DBModel(
             id: id,
             date: date,
-            cashBalance: cashBalance,
-            bankBalance: bankBalance,
-            cardBalance: cardBalance
+            startingCash: startingCash,
+            cashIncome: cashIncome,
+            bankIncome: bankIncome,
+            cardIncome: cardIncome
         )
+    }
+
+    public var cashBalance: Double {
+        startingCash + cashIncome
     }
 
     public func fraction(ofAccount type: PaymentType) -> Double {
         switch type {
         case .cash:
-            return cashBalance / balance
+            return cashIncome / income
         case .bank:
-            return bankBalance / balance
+            return bankIncome / income
         case .card:
-            return cardBalance / balance
+            return cardIncome / income
         }
     }
 }
