@@ -18,7 +18,8 @@ public final class Ledger: Codable {
     }
 
     public func incomeFraction(ofAccount type: PaymentType) -> Double {
-        reporting(.income, of: type) / reporting(.income)
+        guard reporting(.income) > 0 else { return 0 }
+        return reporting(.income, of: type) / reporting(.income)
     }
 }
 
