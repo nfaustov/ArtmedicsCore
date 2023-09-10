@@ -33,6 +33,10 @@ public struct Report: Codable, Hashable, Identifiable {
         )
     }
 
+    public var cashBalance: Double {
+        startingCash + reporting(.profit, of: .cash())
+    }
+
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
         case .profit:
