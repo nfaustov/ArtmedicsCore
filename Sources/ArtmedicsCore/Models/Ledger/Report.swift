@@ -4,17 +4,20 @@ public struct Report: Codable, Hashable, Identifiable {
     public let id: UUID
     public let date: Date
     public let startingCash: Double
+    public let collected: Double
     public var payments: [Payment] = []
 
     public init(
         id: UUID = UUID(),
         date: Date,
         startingCash: Double,
+        collected: Double,
         payments: [Payment]
     ) {
         self.id = id
         self.date = date
         self.startingCash = startingCash
+        self.collected = collected
         self.payments = payments
     }
 
@@ -23,18 +26,20 @@ public struct Report: Codable, Hashable, Identifiable {
         self.date = dbModel.date
         self.startingCash = dbModel.startingCash
         self.payments = payments
+        self.collected = dbModel.collected
     }
 
     public var dbModel: Report.DBModel {
         DBModel(
             id: id,
             date: date,
-            startingCash: startingCash
+            startingCash: startingCash,
+            collected: collected
         )
     }
 
     public var cashBalance: Double {
-        startingCash + reporting(.profit, of: .cash())
+        startingCash + reporting(.profit, of: .cash()) - collected
     }
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
