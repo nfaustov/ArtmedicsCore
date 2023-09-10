@@ -2,11 +2,9 @@ import Foundation
 
 public final class Ledger: Codable {
     public var reports: [Report]
-    public var paymentPurposes: [String]
 
-    public init(reports: [Report], paymentPurposes: [String]) {
+    public init(reports: [Report]) {
         self.reports = reports
-        self.paymentPurposes = paymentPurposes
     }
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
@@ -28,14 +26,5 @@ public enum Reporting: String, Hashable, Identifiable, CaseIterable {
 
     public var id: Self {
         self
-    }
-}
-
-public extension Ledger {
-    enum PaymentPurpose: String, Hashable, CaseIterable {
-        case equipment = "Оборудование"
-        case consumables = "Расходники"
-        case laboratory = "Лаборатория"
-        case building = "Помещение"
     }
 }

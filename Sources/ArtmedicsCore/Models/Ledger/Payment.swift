@@ -2,23 +2,23 @@ import Foundation
 
 public struct Payment: Codable, Hashable, Identifiable {
     public let id: UUID
-    public let title: String
+    public let date: Date
+    public let purpose: Purpose
     public let types: [PaymentType]
     public var bill: Bill?
-    public let createdAt: Date
 
     public init(
         id: UUID = UUID(),
-        title: String,
+        date: Date = Date(),
+        purpose: Purpose,
         types: [PaymentType],
-        bill: Bill? = nil,
-        createdAt: Date = Date()
+        bill: Bill? = nil
     ) {
         self.id = id
-        self.title = title
+        self.date = date
+        self.purpose = purpose
         self.types = types
         self.bill = bill
-        self.createdAt = createdAt
     }
 
     public var totalAmount: Double {

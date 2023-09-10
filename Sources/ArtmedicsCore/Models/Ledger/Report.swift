@@ -4,20 +4,17 @@ public struct Report: Codable, Hashable, Identifiable {
     public let id: UUID
     public let date: Date
     public let startingCash: Double
-    public let collected: Double
     public var payments: [Payment] = []
 
     public init(
         id: UUID = UUID(),
         date: Date,
         startingCash: Double,
-        collected: Double,
         payments: [Payment]
     ) {
         self.id = id
         self.date = date
         self.startingCash = startingCash
-        self.collected = collected
         self.payments = payments
     }
 
@@ -26,26 +23,28 @@ public struct Report: Codable, Hashable, Identifiable {
         self.date = dbModel.date
         self.startingCash = dbModel.startingCash
         self.payments = payments
-        self.collected = dbModel.collected
     }
 
     public var dbModel: Report.DBModel {
         DBModel(
             id: id,
             date: date,
-            startingCash: startingCash,
-            collected: collected
+            startingCash: startingCash
         )
     }
 
+    public var collectionPayments: [Payment] {
+        payments.filter { $0.purpose == .collection }
+    }
+
     public var cashBalance: Double {
-        startingCash + reporting(.profit, of: .cash()) - collected
+        startingCash + reporting(.profit, of: .cash()) + collected
     }
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
         case .profit:
-            return  paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
+            return paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
         case .income:
             return paymentTypes(ofType: type)
                 .filter { $0.value > 0 }
@@ -66,13 +65,22 @@ public struct Report: Codable, Hashable, Identifiable {
 // MARK: - Private methods
 
 private extension Report {
+    private var collected: Double {
+        collectionPayments
+            .flatMap { $0.types }
+            .reduce(0.0) { $0 + $1.value }
+    }
+
     func paymentTypes(ofType type: PaymentType?) -> [PaymentType] {
         if let type {
             return payments
+                .filter { $0.purpose != .collection }
                 .flatMap { $0.types }
                 .filter { $0.isSameTypeAs(type) }
         } else {
-            return payments.flatMap { $0.types }
+            return payments
+                .filter { $0.purpose != .collection }
+                .flatMap { $0.types }
         }
     }
 }
