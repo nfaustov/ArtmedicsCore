@@ -53,7 +53,7 @@ public struct Report: Codable, Hashable, Identifiable {
     }
 
     public func fraction(_ kind: Reporting, ofAccount type: PaymentType) -> Double {
-        guard reporting(kind) > 0 else { return 0 }
+        guard reporting(kind) != 0 else { return 0 }
         return reporting(kind, of: type) / reporting(kind)
     }
 }
