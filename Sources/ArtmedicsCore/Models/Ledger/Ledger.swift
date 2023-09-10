@@ -24,9 +24,9 @@ public final class Ledger: Codable {
 }
 
 public enum Reporting: String, Hashable, Identifiable, CaseIterable {
-    case profit = "Прибыль"
-    case income = "Поступления"
-    case expense = "Списания"
+    case profit = "Баланс"
+    case income = "Доходы"
+    case expense = "Расходы"
 
     public var id: Self {
         self

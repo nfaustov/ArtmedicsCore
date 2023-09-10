@@ -52,17 +52,9 @@ public struct Report: Codable, Hashable, Identifiable {
         }
     }
 
-    public func incomeFraction(ofAccount type: PaymentType) -> Double {
-        guard reporting(.income) > 0 else { return 0 }
-
-        switch type {
-        case .cash:
-            return reporting(.income, of: .cash()) / reporting(.income)
-        case .bank:
-            return reporting(.income, of: .bank()) / reporting(.income)
-        case .card:
-            return reporting(.income, of: .card()) / reporting(.income)
-        }
+    public func fraction(_ kind: Reporting, ofAccount type: PaymentType) -> Double {
+        guard reporting(kind) > 0 else { return 0 }
+        return reporting(kind, of: type) / reporting(kind)
     }
 }
 
