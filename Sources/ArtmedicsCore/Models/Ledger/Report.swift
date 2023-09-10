@@ -35,14 +35,8 @@ public struct Report: Codable, Hashable, Identifiable {
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
-        case .balance:
-            var balance = paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
-
-            if type == .cash() || type == nil {
-               balance += startingCash
-            }
-
-            return balance
+        case .profit:
+            return  paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
         case .income:
             return paymentTypes(ofType: type)
                 .filter { $0.value > 0 }

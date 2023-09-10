@@ -22,8 +22,12 @@ public final class Ledger: Codable {
     }
 }
 
-public enum Reporting {
-    case balance
+public enum Reporting: Hashable, Identifiable, CaseIterable {
+    case profit
     case income
     case expense
+
+    public var id: Self {
+        self
+    }
 }
