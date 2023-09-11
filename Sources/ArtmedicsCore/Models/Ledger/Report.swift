@@ -37,6 +37,10 @@ public struct Report: Codable, Hashable, Identifiable {
         payments.filter { $0.purpose == .collection }
     }
 
+    public var billPayments: [Payment] {
+        payments.filter { $0.bill != nil }
+    }
+
     public var cashBalance: Double {
         startingCash + reporting(.profit, of: .cash()) + collected
     }
