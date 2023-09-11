@@ -45,6 +45,17 @@ public struct Report: Codable, Hashable, Identifiable {
         startingCash + reporting(.profit, of: .cash()) + collected
     }
 
+    public func payments(byOperation type: OperationType) -> [Payment] {
+        switch type {
+        case .all:
+            return payments
+        case .bills:
+            return payments.filter { $0.bill != nil }
+        case .collections:
+            return payments.filter { $0.purpose == .collection }
+        }
+    }
+
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
         case .profit:
@@ -63,6 +74,14 @@ public struct Report: Codable, Hashable, Identifiable {
     public func fraction(_ kind: Reporting, ofAccount type: PaymentType) -> Double {
         guard reporting(kind) != 0 else { return 0 }
         return reporting(kind, of: type) / reporting(kind)
+    }
+}
+
+public extension Report {
+    enum OperationType: String, Hashable, CaseIterable {
+        case all = "Все"
+        case bills = "Счета"
+        case collections = "Инкассация"
     }
 }
 

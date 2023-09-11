@@ -60,7 +60,7 @@ public extension Payment {
         }
 
         public static var userSelectableCases: [Payment.Purpose] {
-            [.equipment(), .consumables(), .laboratory(), .building()]
+            [.collection, .equipment(), .consumables(), .laboratory(), .building()]
         }
     }
 }
