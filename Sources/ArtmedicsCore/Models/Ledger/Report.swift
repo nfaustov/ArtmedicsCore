@@ -33,27 +33,8 @@ public struct Report: Codable, Hashable, Identifiable {
         )
     }
 
-    public var collectionPayments: [Payment] {
-        payments.filter { $0.purpose == .collection }
-    }
-
-    public var billPayments: [Payment] {
-        payments.filter { $0.bill != nil }
-    }
-
     public var cashBalance: Double {
         startingCash + reporting(.profit, of: .cash()) + collected
-    }
-
-    public func payments(byOperation type: OperationType) -> [Payment] {
-        switch type {
-        case .all:
-            return payments
-        case .bills:
-            return payments.filter { $0.bill != nil }
-        case .collections:
-            return payments.filter { $0.purpose == .collection }
-        }
     }
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
@@ -77,33 +58,23 @@ public struct Report: Codable, Hashable, Identifiable {
     }
 }
 
-public extension Report {
-    enum OperationType: String, Hashable, CaseIterable {
-        case all = "Все"
-        case bills = "Счета"
-        case collections = "Инкассация"
-    }
-}
-
 // MARK: - Private methods
 
 private extension Report {
     private var collected: Double {
-        collectionPayments
+        payments
+            .filter { $0.purpose == .collection }
             .flatMap { $0.types }
             .reduce(0.0) { $0 + $1.value }
     }
 
     func paymentTypes(ofType type: PaymentType?) -> [PaymentType] {
-        if let type {
-            return payments
-                .filter { $0.purpose != .collection }
-                .flatMap { $0.types }
-                .filter { $0.isSameTypeAs(type) }
-        } else {
-            return payments
-                .filter { $0.purpose != .collection }
-                .flatMap { $0.types }
-        }
+        let types = payments
+            .filter { $0.purpose != .collection }
+            .flatMap { $0.types }
+
+        if let type { return types.filter { $0.isSameTypeAs(type) } }
+
+        return types
     }
 }
