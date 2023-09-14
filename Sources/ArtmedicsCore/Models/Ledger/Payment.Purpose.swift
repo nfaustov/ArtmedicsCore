@@ -6,6 +6,7 @@ public extension Payment {
         case salary(String = "")
         case agentFee(String = "")
         case medicalServices(String = "")
+        case refund(String = "")
         case toBalance(String = "")
         case fromBalance(String = "")
         case equipment(String = "")
@@ -19,6 +20,7 @@ public extension Payment {
             case .salary: return "Заработная плата"
             case .agentFee: return "Агентские"
             case .medicalServices: return "Оплата услуг"
+            case .refund: return "Возврат"
             case .toBalance: return "Пополнение баланса"
             case .fromBalance: return "Списание с баланса"
             case .equipment: return "Оборудование"
@@ -35,6 +37,7 @@ public extension Payment {
                 case .salary(let description): return description
                 case .agentFee(let description): return description
                 case .medicalServices(let description): return description
+                case .refund(let description): return description
                 case .toBalance(let description): return description
                 case .fromBalance(let description): return description
                 case .equipment(let description): return description
@@ -48,6 +51,7 @@ public extension Payment {
                 case .salary: self = .salary(newValue)
                 case .agentFee: self = .agentFee(newValue)
                 case .medicalServices: self = .medicalServices(newValue)
+                case .refund: self = .refund(newValue)
                 case .toBalance: self = .toBalance(newValue)
                 case .fromBalance: self = .fromBalance(newValue)
                 case .equipment: self = .equipment(newValue)
