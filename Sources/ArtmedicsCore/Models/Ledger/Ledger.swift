@@ -39,7 +39,7 @@ public final class Ledger: Codable {
             default:()
             }
 
-            if let agent = service.agent {
+            if service.agent != nil {
                 salaryForServices += service.pricelistItem.price * 0.1
             }
 

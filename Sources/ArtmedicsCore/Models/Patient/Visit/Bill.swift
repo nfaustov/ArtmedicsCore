@@ -4,7 +4,6 @@ public struct Bill: Codable, Hashable, Identifiable {
     public let id: UUID
     public var services: [RenderedService]
     public var discount: Double
-    public var balance: Double
     public var contract: Data?
 
     public var price: Double {
@@ -14,7 +13,7 @@ public struct Bill: Codable, Hashable, Identifiable {
     }
 
     public var totalPrice: Double {
-        price - discount - balance
+        price - discount
     }
 
     public var discountRate: Double {
@@ -26,13 +25,11 @@ public struct Bill: Codable, Hashable, Identifiable {
         id: UUID = UUID(),
         services: [RenderedService],
         discount: Double = 0,
-        balance: Double = 0,
         contract: Data? = nil
     ) {
         self.id = id
         self.services = services
         self.discount = discount
-        self.balance = balance
         self.contract = contract
     }
 }
