@@ -28,9 +28,9 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
-    public init(from dbModel: DoctorSchedule.DBModel, patientAppointments: [PatientAppointment]) {
+    public init(from dbModel: DoctorSchedule.DBModel, doctor: Doctor, patientAppointments: [PatientAppointment]) {
         self.id = dbModel.id
-        self.doctor = dbModel.doctor
+        self.doctor = doctor
         self.cabinet = dbModel.cabinet
         self.starting = dbModel.starting
         self.ending = dbModel.ending
@@ -38,7 +38,13 @@ public struct DoctorSchedule: Codable, Equatable, Hashable, Identifiable {
     }
 
     public var dbModel: DoctorSchedule.DBModel {
-        DBModel(id: id, doctor: doctor, cabinet: cabinet, starting: starting, ending: ending)
+        DBModel(
+            id: id,
+            doctorId: doctor.id,
+            cabinet: cabinet,
+            starting: starting,
+            ending: ending
+        )
     }
 
     public var scheduledPatients: Int {
