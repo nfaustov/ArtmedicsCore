@@ -10,6 +10,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
     public var passport: PassportData?
     public var placeOfResidence: PlaceOfResidence?
     public var treatmentPlan: TreatmentPlan?
+    public var createdAt: Date
     public var visits: [Visit]
 
     public init(
@@ -22,6 +23,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         passport: PassportData? = nil,
         placeOfResidence: PlaceOfResidence? = nil,
         treatmentPlan: TreatmentPlan? = nil,
+        createdAt: Date,
         visits: [Visit] = []
     ) {
         self.id = id
@@ -33,6 +35,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         self.passport = passport
         self.placeOfResidence = placeOfResidence
         self.treatmentPlan = treatmentPlan
+        self.createdAt = createdAt
         self.visits = visits
     }
 
@@ -46,6 +49,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         passport = dbModel.passport
         placeOfResidence = dbModel.placeOfResidence
         treatmentPlan = dbModel.treatmentPlan
+        createdAt = dbModel.createdAt
         self.visits = visits
     }
 
@@ -59,7 +63,8 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
             balance: balance,
             passport: passport,
             placeOfResidence: placeOfResidence,
-            treatmentPlan: treatmentPlan
+            treatmentPlan: treatmentPlan,
+            createdAt: createdAt
         )
     }
 }

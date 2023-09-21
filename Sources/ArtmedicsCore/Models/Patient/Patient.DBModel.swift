@@ -11,6 +11,7 @@ public extension Patient {
         public var passport: PassportData?
         public var placeOfResidence: PlaceOfResidence?
         public var treatmentPlan: TreatmentPlan?
+        public var createdAt: Date
 
         init(
             id: UUID,
@@ -21,7 +22,8 @@ public extension Patient {
             balance: Double = 0,
             passport: PassportData? = nil,
             placeOfResidence: PlaceOfResidence? = nil,
-            treatmentPlan: TreatmentPlan? = nil
+            treatmentPlan: TreatmentPlan? = nil,
+            createdAt: Date
         ) {
             self.id = id
             self.secondName = secondName
@@ -32,6 +34,7 @@ public extension Patient {
             self.passport = passport
             self.placeOfResidence = placeOfResidence
             self.treatmentPlan = treatmentPlan
+            self.createdAt = createdAt
         }
     }
 }
