@@ -9,7 +9,7 @@ public struct Payment: Codable, Hashable, Identifiable {
 
     public init(
         id: UUID = UUID(),
-        date: Date = Date(),
+        date: Date = .now,
         purpose: Purpose,
         types: [PaymentType],
         bill: Bill? = nil

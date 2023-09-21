@@ -19,10 +19,10 @@ public extension Patient {
             firstName: String,
             patronymicName: String,
             phoneNumber: String,
-            balance: Double = 0,
-            passport: PassportData? = nil,
-            placeOfResidence: PlaceOfResidence? = nil,
-            treatmentPlan: TreatmentPlan? = nil,
+            balance: Double,
+            passport: PassportData?,
+            placeOfResidence: PlaceOfResidence?,
+            treatmentPlan: TreatmentPlan?,
             createdAt: Date
         ) {
             self.id = id

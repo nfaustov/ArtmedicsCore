@@ -10,7 +10,7 @@ public struct Visit: Codable, Hashable, Identifiable {
 
     public init(
         id: UUID = UUID(),
-        registrationDate: Date,
+        registrationDate: Date = .now,
         visitDate: Date,
         cancellationDate: Date? = nil,
         bill: Bill? = nil,

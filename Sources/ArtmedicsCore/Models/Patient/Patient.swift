@@ -23,7 +23,7 @@ public struct Patient: Person, Codable, Hashable, Identifiable {
         passport: PassportData? = nil,
         placeOfResidence: PlaceOfResidence? = nil,
         treatmentPlan: TreatmentPlan? = nil,
-        createdAt: Date,
+        createdAt: Date = .now,
         visits: [Visit] = []
     ) {
         self.id = id
