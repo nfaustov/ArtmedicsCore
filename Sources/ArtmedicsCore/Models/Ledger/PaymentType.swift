@@ -30,6 +30,13 @@ public enum PaymentType: Codable, Hashable, CaseIterable {
         }
     }
 
+    public var additionalTypes: [PaymentType] {
+        var types = PaymentType.allCases
+        types.removeAll(where: { $0 == self })
+
+        return types
+    }
+
     public static var allCases: [PaymentType] {
         [.cash(), .bank(), .card()]
     }
