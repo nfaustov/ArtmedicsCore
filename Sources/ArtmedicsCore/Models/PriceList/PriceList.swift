@@ -2,13 +2,15 @@ import Foundation
 
 public final class PriceList {
     public var categories: [Category]
+    public var sets: [ServicesSet]
 
     public var items: [Item] {
         categories.flatMap { $0.items }
     }
 
-    public init(categories: [Category]) {
+    public init(categories: [Category], sets: [ServicesSet] = []) {
         self.categories = categories
+        self.sets = sets
     }
 
     public func filteredCategories(byItem filterText: String) -> [Category] {
@@ -31,5 +33,15 @@ public final class PriceList {
         } else {
             return Category(title: "Другие")
         }
+    }
+}
+
+public struct ServicesSet: Codable, Hashable, Identifiable {
+    public let id: UUID
+    public var services: [RenderedService]
+
+    public init(id: UUID = UUID(), services: [RenderedService] = []) {
+        self.id = id
+        self.services = services
     }
 }
