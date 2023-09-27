@@ -46,3 +46,16 @@ public extension PriceList.Category {
         }
     }
 }
+
+public enum Department: String, Hashable, Codable, CaseIterable {
+    case gynecology = "Гинекология"
+    case therapy = "Терапия"
+    case urology = "Урология"
+    case ultrasound = "Ультразвуковая диагностика"
+    case gastroenterology = "Гастроэнтерология"
+    case endocrinology = "Эндокринология"
+    case cardiology = "Кардиология"
+    case vascularSurgery = "Сердечно-сосудистая хирургия"
+    case functionalDiagnostics = "Функциональная диагностика"
+    case neurology = "Неврология"
+}
