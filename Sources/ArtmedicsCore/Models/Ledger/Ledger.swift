@@ -33,9 +33,11 @@ public final class Ledger: Codable {
         var salaryForServices = 0.0
 
         for service in servicesWithPricelistItem(id: id, period: period) {
-            switch service.performer.salary {
+            switch service.performer?.salary {
             case let .pieceRate(rate):
                 salaryForServices += service.pricelistItem.price * rate
+            case let .perService(amount):
+                salaryForServices += Double(amount)
             default:()
             }
 

@@ -18,20 +18,20 @@ public struct AnyEmployee: Employee, Codable, Hashable, Identifiable {
 
 public enum Salary: Codable, Hashable, CaseIterable {
     case pieceRate(rate: Double = 0.4)
-    case perVisit(amount: Int = 0)
+    case perService(amount: Int = 0)
     case monthly(amount: Int = 0)
     case hourly(amount: Int = 0)
 
     public var title: String {
         switch self {
         case .pieceRate: return "Сдельная"
-        case .perVisit: return "За прием"
+        case .perService: return "За прием"
         case .monthly: return "Ежемесячная"
         case .hourly: return "Почасовая"
         }
     }
 
     public static var allCases: [Salary] {
-        [.pieceRate(), .perVisit(), .monthly(), .hourly()]
+        [.pieceRate(), .perService(), .monthly(), .hourly()]
     }
 }
