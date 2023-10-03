@@ -12,7 +12,7 @@ public struct User: Employee, Codable, Hashable, Identifiable {
     public var balance: Double
     public var imageUrl: String
 
-    init(
+    public init(
         id: UUID = UUID(),
         secondName: String,
         firstName: String,

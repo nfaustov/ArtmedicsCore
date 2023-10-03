@@ -12,6 +12,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
         case vascularSurgeon = "Сосудистый хирург"
         case functionalDiagnostics = "Врач функциональной диагностики"
         case neurologist = "Невролог"
+        case nurse = "Медицинская сестра"
 
         public var id: Self {
             self
