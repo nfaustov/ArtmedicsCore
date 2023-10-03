@@ -37,6 +37,13 @@ public struct Report: Codable, Hashable, Identifiable {
         startingCash + reporting(.profit, of: .cash()) + collected
     }
 
+    public var collected: Double {
+        payments
+            .filter { $0.purpose == .collection }
+            .flatMap { $0.types }
+            .reduce(0.0) { $0 + $1.value }
+    }
+
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
         case .profit:
@@ -61,13 +68,6 @@ public struct Report: Codable, Hashable, Identifiable {
 // MARK: - Private methods
 
 private extension Report {
-    private var collected: Double {
-        payments
-            .filter { $0.purpose == .collection }
-            .flatMap { $0.types }
-            .reduce(0.0) { $0 + $1.value }
-    }
-
     func paymentTypes(ofType type: PaymentType?) -> [PaymentType] {
         let types = payments
             .filter { $0.purpose != .collection }
