@@ -34,26 +34,26 @@ public struct Report: Codable, Hashable, Identifiable {
     }
 
     public var cashBalance: Double {
-        startingCash + reporting(.profit, of: .cash()) + collected
+        startingCash + reporting(.profit, of: .cash) + collected
     }
 
     public var collected: Double {
         payments
             .filter { $0.purpose == .collection }
-            .flatMap { $0.types }
+            .flatMap { $0.methods }
             .reduce(0.0) { $0 + $1.value }
     }
 
     public func reporting(_ reporting: Reporting, of type: PaymentType? = nil) -> Double {
         switch reporting {
         case .profit:
-            return paymentTypes(ofType: type).reduce(0.0) { $0 + $1.value }
+            return paymentMethods(ofType: type).reduce(0.0) { $0 + $1.value }
         case .income:
-            return paymentTypes(ofType: type)
+            return paymentMethods(ofType: type)
                 .filter { $0.value > 0 }
                 .reduce(0.0) { $0 + $1.value }
         case .expense:
-            return paymentTypes(ofType: type)
+            return paymentMethods(ofType: type)
                 .filter { $0.value < 0 }
                 .reduce(0.0) { $0 + $1.value}
         }
@@ -68,13 +68,13 @@ public struct Report: Codable, Hashable, Identifiable {
 // MARK: - Private methods
 
 private extension Report {
-    func paymentTypes(ofType type: PaymentType?) -> [PaymentType] {
-        let types = payments
+    func paymentMethods(ofType type: PaymentType?) -> [Payment.Method] {
+        let methods = payments
             .filter { $0.purpose != .collection }
-            .flatMap { $0.types }
+            .flatMap { $0.methods }
 
-        if let type { return types.filter { $0.isSameTypeAs(type) } }
+        if let type { return methods.filter { $0.type == type } }
 
-        return types
+        return methods
     }
 }
