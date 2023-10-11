@@ -23,8 +23,9 @@ public extension Patient {
         }
     }
 
-    enum Gender: String, Codable, Hashable {
-        case male = "МУЖ"
-        case female = "ЖЕН"
+    enum Gender: String, Codable, Hashable, CaseIterable {
+        case male = "муж"
+        case female = "жен"
+        case unknown = "-"
     }
 }
