@@ -22,10 +22,10 @@ public extension Patient {
             self.authority = authority
         }
     }
+}
 
-    enum Gender: String, Codable, Hashable, CaseIterable {
-        case male = "муж"
-        case female = "жен"
-        case unknown = "-"
-    }
+public enum Gender: String, Codable, Hashable, CaseIterable {
+    case male = "муж"
+    case female = "жен"
+    case unknown = "неизвестен"
 }
