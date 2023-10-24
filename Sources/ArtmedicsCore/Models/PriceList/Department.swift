@@ -2,6 +2,7 @@ import Foundation
 
 public enum Department: String, Hashable, Codable, CaseIterable, Identifiable {
     case gynecology = "Гинекология"
+    case obstetrics = "Акушерство"
     case therapy = "Терапия"
     case urology = "Урология"
     case ultrasound = "Ультразвуковая диагностика"
@@ -17,6 +18,7 @@ public enum Department: String, Hashable, Codable, CaseIterable, Identifiable {
     public var specialization: String {
         switch self {
         case .gynecology: return "Гинеколог"
+        case .obstetrics: return "Акушер-гинеколог"
         case .therapy: return "Терапевт"
         case .urology: return "Уролог"
         case .ultrasound: return "Врач УЗИ"
