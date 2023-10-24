@@ -1,31 +1,13 @@
 import Foundation
 
 public struct Doctor: Employee, Codable, Hashable, Identifiable {
-    public enum Specialization: String, Codable, CaseIterable, Hashable, Identifiable {
-        case gynecologist = "Гинеколог"
-        case therapist = "Терапевт"
-        case urologist = "Уролог"
-        case ultrasound = "Врач УЗИ"
-        case gastroenterologist = "Гастроэнтеролог"
-        case endocrinologist = "Эндокринолог"
-        case cardiologist = "Кардиолог"
-        case vascularSurgeon = "Сосудистый хирург"
-        case functionalDiagnostics = "Врач функциональной диагностики"
-        case neurologist = "Невролог"
-        case nurse = "Медицинская сестра"
-
-        public var id: Self {
-            self
-        }
-    }
-
     public let id: UUID
     public var secondName: String
     public var firstName: String
     public var patronymicName: String
     public var phoneNumber: String
     public var birthDate: Date
-    public var specialization: Specialization
+    public var department: Department
     public var basicServiceId: String
     public var serviceDuration: TimeInterval
     public var defaultCabinet: Int
@@ -42,7 +24,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
         patronymicName: String,
         phoneNumber: String,
         birthDate: Date,
-        specialization: Specialization,
+        department: Department,
         basicServiceId: String = "",
         serviceDuration: TimeInterval,
         defaultCabinet: Int,
@@ -58,7 +40,7 @@ public struct Doctor: Employee, Codable, Hashable, Identifiable {
         self.patronymicName = patronymicName
         self.phoneNumber = phoneNumber
         self.birthDate = birthDate
-        self.specialization = specialization
+        self.department = department
         self.basicServiceId = basicServiceId
         self.serviceDuration = serviceDuration
         self.defaultCabinet = defaultCabinet
