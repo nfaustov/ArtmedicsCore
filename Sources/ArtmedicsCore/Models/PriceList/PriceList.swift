@@ -9,16 +9,24 @@ public final class PriceList {
         self.billTemplates = billTemplates
     }
 
-    public func filteredItems(by filterText: String) -> [Item] {
+    public func filteredItems(by filterText: String, for category: Department) -> [Item] {
         if filterText.isEmpty {
-            return items
+            return items.filter { $0.category == category }
         } else {
             return items
+                .filter { $0.category == category }
                 .filter {
                     $0.title.localizedCaseInsensitiveContains(filterText) || 
                     $0.id.localizedCaseInsensitiveContains(filterText)
                 }
-                .sorted(by: { $0.category.rawValue < $1.category.rawValue })
+        }
+    }
+
+    public func filteredCategories(byItem filterText: String) -> [Department] {
+        if filterText.isEmpty {
+            return Department.allCases
+        } else {
+            return Department.allCases.filter { !filteredItems(by: filterText, for: $0).isEmpty }
         }
     }
 }
